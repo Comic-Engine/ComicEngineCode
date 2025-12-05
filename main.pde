@@ -1,18 +1,20 @@
 import g4p_controls.*;
 
+Tool currentTool;
+
 float brushSize;
 color brushColor = color(0); // Black
 
 void setup() {
-  size(1000, 700);
   createGUI();
+  size(1000, 700);
   background(255);
+  
+  currentTool = new PencilTool();
 }
 
 void draw(){
   if (mousePressed){
-    stroke(brushColor);
-    strokeWeight(brushSize);
-    line(pmouseX, pmouseY, mouseX, mouseY);
+    currentTool.mouseDragged();
   }
 }

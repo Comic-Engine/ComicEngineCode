@@ -51,7 +51,7 @@ public void createGUI(){
   Marker.addEventHandler(this, "Marker_click");
   thickness = new GCustomSlider(window1, 69, 55, 100, 40, "grey_blue");
   thickness.setShowValue(true);
-  thickness.setLimits(5.0, 0.1, 50.0);
+  thickness.setLimits(20.0, 0.1, 50.0);
   thickness.setNbrTicks(5);
   thickness.setShowTicks(true);
   thickness.setNumberFormat(G4P.DECIMAL, 2);
