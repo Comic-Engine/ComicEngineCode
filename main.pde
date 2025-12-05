@@ -14,9 +14,7 @@ void setup() {
 }
 
 void draw(){
-  if (currentTool != null) {
-    currentTool.preview();
-  }
+  // Empty
 }
 
 void mouseDragged() {

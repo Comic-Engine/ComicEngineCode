@@ -1,5 +1,6 @@
 class LineTool extends Tool {
   float startX, startY;
+  PImage beforeDrag; // snapshot before drawing the preview
   boolean dragging = false;
   
   LineTool(float size, color c) {
@@ -9,11 +10,15 @@ class LineTool extends Tool {
   void mousePressed() {
     startX = mouseX;
     startY = mouseY;
+    beforeDrag = get(); // take snapshot of canvas once
     dragging = true;
   }
   
   void mouseReleased() {
     if(dragging) {
+      // restore original canvas
+      image(beforeDrag, 0, 0);
+      // draw preview line
       stroke(toolColor);
       strokeWeight(toolSize);
       line(startX, startY, mouseX, mouseY);
@@ -22,11 +27,10 @@ class LineTool extends Tool {
   }
   
   void mouseDragged() {
-    // Does nothing overriding Tool class
-  }
-  
-  void preview() {
-    if (dragging) {
+    if(dragging) {
+      // restore original canvas
+      image(beforeDrag, 0, 0);
+      // draw preview line
       stroke(toolColor);
       strokeWeight(toolSize);
       line(startX, startY, mouseX, mouseY);

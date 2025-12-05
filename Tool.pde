@@ -15,5 +15,4 @@ class Tool {
   
   void mousePressed() {}
   void mouseReleased() {}
-  void preview() {}
 }
