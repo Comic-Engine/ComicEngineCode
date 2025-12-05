@@ -18,6 +18,13 @@ synchronized public void win_draw1(PApplet appc, GWinData data) { //_CODE_:Setti
   appc.background(230);
 } //_CODE_:Settings:808014:
 
+public void ToolSliderChanged(GCustomSlider source, GEvent event) { //_CODE_:ToolSlider:942316:
+  brushSize = ToolSlider.getValueF();
+  if(currentTool != null){
+    currentTool.toolSize = brushSize;
+  }
+} //_CODE_:ToolSlider:942316:
+
 public void PencilButtonClick(GButton source, GEvent event) { //_CODE_:PencilButton:261240:
   currentTool = new PencilTool(brushSize, currentColor);
 } //_CODE_:PencilButton:261240:
@@ -30,13 +37,9 @@ public void LineButtonClick(GButton source, GEvent event) { //_CODE_:LineButton:
   currentTool = new LineTool(brushSize, currentColor);
 } //_CODE_:LineButton:506486:
 
-
-public void ToolSliderChanged(GCustomSlider source, GEvent event) { //_CODE_:ToolSlider:942316:
-  brushSize = ToolSlider.getValueF();
-  if(currentTool != null){
-    currentTool.toolSize = brushSize;
-  }
-} //_CODE_:ToolSlider:942316:
+public void RectangleButtonClick(GButton source, GEvent event) { //_CODE_:RectangleButton:428010:
+  currentTool = new RectangleTool(brushSize, currentColor);
+} //_CODE_:RectangleButton:428010:
 
 
 
@@ -57,7 +60,7 @@ public void createGUI(){
   EraserButton = new GButton(Settings, 220, 55, 80, 30);
   EraserButton.setText("Eraser");
   EraserButton.addEventHandler(this, "EraserButtonClick");
-  ToolSlider = new GCustomSlider(Settings, 68, 55, 100, 40, "grey_blue");
+  ToolSlider = new GCustomSlider(Settings, 110, 246, 100, 40, "grey_blue");
   ToolSlider.setShowValue(true);
   ToolSlider.setLimits(15.0, 0.1, 50.0);
   ToolSlider.setNbrTicks(5);
@@ -68,6 +71,10 @@ public void createGUI(){
   LineButton = new GButton(Settings, 220, 95, 80, 30);
   LineButton.setText("Line");
   LineButton.addEventHandler(this, "LineButtonClick");
+  RectangleButton = new GButton(Settings, 18, 13, 80, 30);
+  RectangleButton.setText("Rectangle");
+  RectangleButton.setLocalColorScheme(GCScheme.GOLD_SCHEME);
+  RectangleButton.addEventHandler(this, "RectangleButtonClick");
   Settings.loop();
 }
 
@@ -78,3 +85,4 @@ GButton PencilButton;
 GButton EraserButton; 
 GCustomSlider ToolSlider; 
 GButton LineButton; 
+GButton RectangleButton; 
