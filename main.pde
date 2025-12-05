@@ -2,15 +2,15 @@ import g4p_controls.*;
 
 Tool currentTool;
 
-float brushSize;
-color brushColor = color(0); // Black
+float brushSize = 10;
+color currentColor = color(0); // Black
 
 void setup() {
-  createGUI();
   size(1000, 700);
+  createGUI();
   background(255);
   
-  currentTool = new PencilTool();
+  currentTool = new PencilTool(brushSize); // Pencil as default
 }
 
 void draw(){

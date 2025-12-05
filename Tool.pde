@@ -1,6 +1,6 @@
 class Tool {
   float toolSize;
-  float toolColor;
+  color toolColor;
   
   Tool(float size, color c) {
     this.toolSize = size;
