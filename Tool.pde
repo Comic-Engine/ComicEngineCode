@@ -7,12 +7,15 @@ class Tool {
     this.toolColor = c;
   }
   
+  void mousePressed() {
+    startAction();
+  }
+  
   void mouseDragged() {
     stroke(toolColor);
     strokeWeight(toolSize);
     line(pmouseX, pmouseY, mouseX, mouseY);
   }
   
-  void mousePressed() {}
   void mouseReleased() {}
 }

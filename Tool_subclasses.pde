@@ -1,51 +1,72 @@
 class PencilTool extends Tool {
-  PencilTool(float size, color c) {
+  PencilTool(float size, color c){
     super(size, c);
+  }
+  
+  void mousePressed() {
+    startAction(); // save undo snapshot
+  }
+  
+  void mouseDragged() {
+    stroke(toolColor);
+    strokeWeight(toolSize);
+    line(pmouseX, pmouseY, mouseX, mouseY);
   }
 }
 
 class EraserTool extends Tool {
-  EraserTool(float size, color c) {
+  EraserTool(float size, color c){
     super(size, c);
+  }
+
+  void mousePressed() {
+    startAction();
+  }
+
+  void mouseDragged() {
+    stroke(255);
+    strokeWeight(toolSize);
+    line(pmouseX, pmouseY, mouseX, mouseY);
   }
 }
 
 class LineTool extends Tool {
   float startX, startY;
-  PImage beforeDrag; // snapshot before drawing the preview
+  PImage beforeDrag;
   boolean dragging = false;
-  
-  LineTool(float size, color c) {
+
+  LineTool(float size, color c){
     super(size, c);
   }
-  
+
   void mousePressed() {
+    startAction();
     startX = mouseX;
     startY = mouseY;
-    beforeDrag = get(); // take snapshot of canvas once
+    beforeDrag = get();
     dragging = true;
   }
-  
-  void mouseReleased() {
-    if(dragging) {
-      // restore original canvas
+
+  void mouseDragged() {
+    if(dragging){
       image(beforeDrag, 0, 0);
-      // draw preview line
       stroke(toolColor);
       strokeWeight(toolSize);
       line(startX, startY, mouseX, mouseY);
-      dragging = false;
     }
   }
-  
-  void mouseDragged() {
-    if(dragging) {
-      // restore original canvas
+
+  void mouseReleased() {
+    if(dragging){
       image(beforeDrag, 0, 0);
-      // draw preview line
       stroke(toolColor);
       strokeWeight(toolSize);
       line(startX, startY, mouseX, mouseY);
+
+      redoStack.clear();
+      
+      dragging = false;
+      beforeDrag = null;
     }
   }
 }

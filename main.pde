@@ -3,8 +3,11 @@ import g4p_controls.*;
 Tool currentTool;
 
 float brushSize = 10;
-color currentColor = color(0); // Black
-ArrayList<Shape> shapes = new ArrayList<Shape>();
+color currentColor = color(0); // Black\
+
+ArrayList<PImage> undoStack = new ArrayList<PImage>();
+ArrayList<PImage> redoStack = new ArrayList<PImage>();
+PImage snapshot;
 
 void setup() {
   size(1000, 700);
@@ -14,10 +17,13 @@ void setup() {
   currentTool = new PencilTool(brushSize, currentColor); // Pencil as default
 }
 
+void startAction() {
+  snapshot = get();
+  undoStack.add(snapshot);
+  redoStack.clear();
+}
+
 void draw(){
-  for (Shape s: shapes){
-    s.draw();
-  }
 }
 
 void mouseDragged() {

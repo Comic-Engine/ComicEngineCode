@@ -18,13 +18,6 @@ synchronized public void win_draw1(PApplet appc, GWinData data) { //_CODE_:Setti
   appc.background(230);
 } //_CODE_:Settings:808014:
 
-public void ToolSliderChanged(GCustomSlider source, GEvent event) { //_CODE_:ToolSlider:942316:
-  brushSize = ToolSlider.getValueF();
-  if(currentTool != null){
-    currentTool.toolSize = brushSize;
-  }
-} //_CODE_:ToolSlider:942316:
-
 public void PencilButtonClick(GButton source, GEvent event) { //_CODE_:PencilButton:261240:
   currentTool = new PencilTool(brushSize, currentColor);
 } //_CODE_:PencilButton:261240:
@@ -32,6 +25,13 @@ public void PencilButtonClick(GButton source, GEvent event) { //_CODE_:PencilBut
 public void EraserButtonClick(GButton source, GEvent event) { //_CODE_:EraserButton:809047:
   currentTool = new EraserTool(brushSize, color(255));
 } //_CODE_:EraserButton:809047:
+
+public void ToolSliderChanged(GCustomSlider source, GEvent event) { //_CODE_:ToolSlider:942316:
+  brushSize = ToolSlider.getValueF();
+  if(currentTool != null){
+    currentTool.toolSize = brushSize;
+  }
+} //_CODE_:ToolSlider:942316:
 
 public void LineButtonClick(GButton source, GEvent event) { //_CODE_:LineButton:506486:
   currentTool = new LineTool(brushSize, currentColor);
@@ -41,6 +41,41 @@ public void RectangleButtonClick(GButton source, GEvent event) { //_CODE_:Rectan
   currentTool = new RectangleTool(brushSize, currentColor);
 } //_CODE_:RectangleButton:428010:
 
+public void TriangleButtonClick(GButton source, GEvent event) { //_CODE_:TriangleButton:994882:
+  println("TriangleButton - GButton >> GEvent." + event + " @ " + millis());
+} //_CODE_:TriangleButton:994882:
+
+public void slider2d1_change1(GSlider2D source, GEvent event) { //_CODE_:slider2d1:849430:
+  println("slider2d1 - GSlider2D >> GEvent." + event + " @ " + millis());
+} //_CODE_:slider2d1:849430:
+
+public void slider1_change1(GSlider source, GEvent event) { //_CODE_:slider1:328018:
+  println("slider1 - GSlider >> GEvent." + event + " @ " + millis());
+} //_CODE_:slider1:328018:
+
+public void textarea1_change1(GTextArea source, GEvent event) { //_CODE_:textarea1:354643:
+  println("textarea1 - GTextArea >> GEvent." + event + " @ " + millis());
+} //_CODE_:textarea1:354643:
+
+public void UndoButtonClick(GImageButton source, GEvent event) { //_CODE_:UndoButton:312280:
+  println("Undo clicked! Stack size: " + undoStack.size());
+  if(undoStack.size() > 0) {
+    PImage last = undoStack.remove(undoStack.size() - 1);
+    redoStack.add(get());
+    set(0, 0, last);  // Use set() instead of image()
+    println("Undo complete! New stack size: " + undoStack.size());
+  }
+} //_CODE_:UndoButton:312280:
+
+public void RedoButtonClick(GImageButton source, GEvent event) { //_CODE_:RedoButton:914227:
+  println("Redo clicked! Stack size: " + redoStack.size());
+  if(redoStack.size() > 0) {
+    PImage next = redoStack.remove(redoStack.size() - 1);
+    undoStack.add(get());
+    set(0, 0, next);  // Use set() instead of image()
+    println("Redo complete! New stack size: " + redoStack.size());
+  }
+} //_CODE_:RedoButton:914227:
 
 
 // Create all the GUI controls. 
@@ -54,13 +89,13 @@ public void createGUI(){
   Settings.noLoop();
   Settings.setActionOnClose(G4P.KEEP_OPEN);
   Settings.addDrawHandler(this, "win_draw1");
-  PencilButton = new GButton(Settings, 220, 15, 80, 30);
+  PencilButton = new GButton(Settings, 220, 55, 80, 30);
   PencilButton.setText("Pencil");
   PencilButton.addEventHandler(this, "PencilButtonClick");
-  EraserButton = new GButton(Settings, 220, 55, 80, 30);
+  EraserButton = new GButton(Settings, 220, 95, 80, 30);
   EraserButton.setText("Eraser");
   EraserButton.addEventHandler(this, "EraserButtonClick");
-  ToolSlider = new GCustomSlider(Settings, 110, 246, 100, 40, "grey_blue");
+  ToolSlider = new GCustomSlider(Settings, 110, 150, 100, 40, "grey_blue");
   ToolSlider.setShowValue(true);
   ToolSlider.setLimits(15.0, 0.1, 50.0);
   ToolSlider.setNbrTicks(5);
@@ -68,13 +103,35 @@ public void createGUI(){
   ToolSlider.setNumberFormat(G4P.DECIMAL, 2);
   ToolSlider.setOpaque(false);
   ToolSlider.addEventHandler(this, "ToolSliderChanged");
-  LineButton = new GButton(Settings, 220, 95, 80, 30);
+  LineButton = new GButton(Settings, 220, 135, 80, 30);
   LineButton.setText("Line");
   LineButton.addEventHandler(this, "LineButtonClick");
-  RectangleButton = new GButton(Settings, 18, 13, 80, 30);
+  RectangleButton = new GButton(Settings, 20, 55, 80, 30);
   RectangleButton.setText("Rectangle");
   RectangleButton.setLocalColorScheme(GCScheme.GOLD_SCHEME);
   RectangleButton.addEventHandler(this, "RectangleButtonClick");
+  TriangleButton = new GButton(Settings, 20, 95, 80, 30);
+  TriangleButton.setText("Triangle");
+  TriangleButton.setLocalColorScheme(GCScheme.GOLD_SCHEME);
+  TriangleButton.addEventHandler(this, "TriangleButtonClick");
+  slider2d1 = new GSlider2D(Settings, 16, 205, 128, 128);
+  slider2d1.setLimitsX(0.5, 0.0, 1.0);
+  slider2d1.setLimitsY(0.5, 0.0, 1.0);
+  slider2d1.setNumberFormat(G4P.DECIMAL, 2);
+  slider2d1.setOpaque(true);
+  slider2d1.addEventHandler(this, "slider2d1_change1");
+  slider1 = new GSlider(Settings, 15, 340, 131, 40, 10.0);
+  slider1.setLimits(0.5, 0.0, 1.0);
+  slider1.setNumberFormat(G4P.DECIMAL, 2);
+  slider1.setOpaque(false);
+  slider1.addEventHandler(this, "slider1_change1");
+  textarea1 = new GTextArea(Settings, 170, 205, 120, 80, G4P.SCROLLBARS_NONE);
+  textarea1.setOpaque(true);
+  textarea1.addEventHandler(this, "textarea1_change1");
+  RedoButton = new GImageButton(Settings, 275, 10, 35, 35, new String[] { "ComicEngineRedoButton.png", "ComicEngineRedoButton.png", "ComicEngineRedoButton.png" } );
+  RedoButton.addEventHandler(this, "RedoButtonClick");
+  UndoButton = new GImageButton(Settings, 230, 10, 35, 35, new String[] { "ComicEngineUndoButton.png", "ComicEngineUndoButton.png", "ComicEngineUndoButton.png" } );
+  UndoButton.addEventHandler(this, "UndoButtonClick");
   Settings.loop();
 }
 
@@ -86,3 +143,9 @@ GButton EraserButton;
 GCustomSlider ToolSlider; 
 GButton LineButton; 
 GButton RectangleButton; 
+GButton TriangleButton; 
+GSlider2D slider2d1; 
+GSlider slider1; 
+GTextArea textarea1; 
+GImageButton RedoButton; 
+GImageButton UndoButton; 
