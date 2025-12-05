@@ -4,6 +4,7 @@ Tool currentTool;
 
 float brushSize = 10;
 color currentColor = color(0); // Black
+ArrayList<Shape> shapes = new ArrayList<Shape>();
 
 void setup() {
   size(1000, 700);
@@ -14,7 +15,9 @@ void setup() {
 }
 
 void draw(){
-  // Empty
+  for (Shape s: shapes){
+    s.draw();
+  }
 }
 
 void mouseDragged() {
