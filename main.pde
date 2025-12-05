@@ -10,7 +10,7 @@ void setup() {
   createGUI();
   background(255);
   
-  currentTool = new PencilTool(brushSize); // Pencil as default
+  currentTool = new PencilTool(brushSize, currentColor); // Pencil as default
 }
 
 void draw(){
