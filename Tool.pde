@@ -12,4 +12,8 @@ class Tool {
     strokeWeight(toolSize);
     line(pmouseX, pmouseY, mouseX, mouseY);
   }
+  
+  void mousePressed() {}
+  void mouseReleased() {}
+  void preview() {}
 }

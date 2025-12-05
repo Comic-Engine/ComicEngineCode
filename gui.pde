@@ -26,6 +26,11 @@ public void EraserButtonClick(GButton source, GEvent event) { //_CODE_:EraserBut
   currentTool = new EraserTool(brushSize, color(255));
 } //_CODE_:EraserButton:809047:
 
+public void LineButtonClick(GButton source, GEvent event) { //_CODE_:LineButton:506486:
+  currentTool = new LineTool(brushSize, currentColor);
+} //_CODE_:LineButton:506486:
+
+
 public void ToolSliderChanged(GCustomSlider source, GEvent event) { //_CODE_:ToolSlider:942316:
   brushSize = ToolSlider.getValueF();
   if(currentTool != null){
@@ -42,14 +47,14 @@ public void createGUI(){
   G4P.setGlobalColorScheme(GCScheme.BLUE_SCHEME);
   G4P.setMouseOverEnabled(false);
   surface.setTitle("Sketch Window");
-  Settings = GWindow.getWindow(this, "Settings", 0, 0, 240, 120, JAVA2D);
+  Settings = GWindow.getWindow(this, "Settings", 0, 0, 320, 480, JAVA2D);
   Settings.noLoop();
   Settings.setActionOnClose(G4P.KEEP_OPEN);
   Settings.addDrawHandler(this, "win_draw1");
-  PencilButton = new GButton(Settings, 20, 15, 80, 30);
+  PencilButton = new GButton(Settings, 220, 15, 80, 30);
   PencilButton.setText("Pencil");
   PencilButton.addEventHandler(this, "PencilButtonClick");
-  EraserButton = new GButton(Settings, 140, 15, 80, 30);
+  EraserButton = new GButton(Settings, 220, 55, 80, 30);
   EraserButton.setText("Eraser");
   EraserButton.addEventHandler(this, "EraserButtonClick");
   ToolSlider = new GCustomSlider(Settings, 68, 55, 100, 40, "grey_blue");
@@ -60,6 +65,9 @@ public void createGUI(){
   ToolSlider.setNumberFormat(G4P.DECIMAL, 2);
   ToolSlider.setOpaque(false);
   ToolSlider.addEventHandler(this, "ToolSliderChanged");
+  LineButton = new GButton(Settings, 220, 95, 80, 30);
+  LineButton.setText("Line");
+  LineButton.addEventHandler(this, "LineButtonClick");
   Settings.loop();
 }
 
@@ -69,3 +77,4 @@ GWindow Settings;
 GButton PencilButton; 
 GButton EraserButton; 
 GCustomSlider ToolSlider; 
+GButton LineButton; 

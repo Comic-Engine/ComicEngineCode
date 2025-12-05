@@ -1,5 +1,5 @@
 class PencilTool extends Tool {
-  PencilTool(float size) {
-    super(size, color(0));
+  PencilTool(float size, color c) {
+    super(size, c);
   }
 }

@@ -14,7 +14,25 @@ void setup() {
 }
 
 void draw(){
-  if (mousePressed){
+  if (currentTool != null) {
+    currentTool.preview();
+  }
+}
+
+void mouseDragged() {
+  if(currentTool != null){
     currentTool.mouseDragged();
+  }
+}
+
+void mousePressed(){
+  if(currentTool != null) {
+    currentTool.mousePressed();
+  }
+}
+
+void mouseReleased() {
+  if(currentTool != null) {
+    currentTool.mouseReleased();
   }
 }
