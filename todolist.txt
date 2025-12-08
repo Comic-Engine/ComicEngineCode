@@ -1,0 +1,10 @@
+// to do
+// checkbox for enabling grid 
+// rgb slider or some sort of colour customization (inspo from color picker program)
+// background fill
+// save system (inspo from furniture program)
+// load system (inspo from furniture program)
+// zoom in and out (inspo from mandel program)
+// text (probably in some example programs)
+// import images
+// more shapes like star, custom polygon, trapezoid, hexagon etc
