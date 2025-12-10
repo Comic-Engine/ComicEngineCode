@@ -72,15 +72,15 @@ public void ColorWheel2DSliderChanged(GSlider2D source, GEvent event) { //_CODE_
   
   // Convert to centered coordinates (-0.5 to 0.5)
   float centerX = x - 0.5;
-  float centerY = y - 0.5;
+  float centerY = -(y - 0.5);
   
   // Create PVector and get heading
   PVector vec = new PVector(centerX, centerY);
   float angle = vec.heading();
-  if (angle < 0) angle += TWO_PI;
+  if (angle < 0) angle += TWO_PI; // No negative angles
   
   // Width parameter for Gaussian (controls color spread)
-  float w = 1.0;
+  float w = 1.5;
   
   // Calculate RGB using Gaussian formulas
   float r = 255 * exp(-pow(angle - PI/2, 2) / w);
@@ -103,7 +103,11 @@ public void ColorWheel2DSliderChanged(GSlider2D source, GEvent event) { //_CODE_
   g = constrain(g, 0, 255);
   b = constrain(b, 0, 255);
   
-  currentColor = color(r, g, b);
+  currentColor = color(r, g, b);  
+    // Update the current tool's color if a tool is active
+  if(currentTool != null) {
+    currentTool.toolColor = currentColor;
+  }
   
   println("Angle: " + degrees(angle) + "°, RGB: " + r + ", " + g + ", " + b);
 } //_CODE_:ColorWheel2DSlider:867200:
@@ -151,8 +155,8 @@ public void createGUI(){
   UndoButton = new GImageButton(Settings, 230, 10, 35, 35, new String[] { "ComicEngineUndoButton.png", "ComicEngineUndoButton.png", "ComicEngineUndoButton.png" } );
   UndoButton.addEventHandler(this, "UndoButtonClick");
   ColorWheel2DSlider = new GSlider2D(Settings, 21, 269, 170, 170);
-  ColorWheel2DSlider.setLimitsX(1.0, 0.0, 1.0);
-  ColorWheel2DSlider.setLimitsY(1.0, 0.0, 1.0);
+  ColorWheel2DSlider.setLimitsX(0.5, 0.0, 1.0);
+  ColorWheel2DSlider.setLimitsY(0.5, 0.0, 1.0);
   ColorWheel2DSlider.setNumberFormat(G4P.DECIMAL, 2);
   ColorWheel2DSlider.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
   ColorWheel2DSlider.setOpaque(true);
