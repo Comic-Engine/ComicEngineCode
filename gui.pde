@@ -45,17 +45,15 @@ public void TriangleButtonClick(GButton source, GEvent event) { //_CODE_:Triangl
   println("TriangleButton - GButton >> GEvent." + event + " @ " + millis());
 } //_CODE_:TriangleButton:994882:
 
-public void slider2d1_change1(GSlider2D source, GEvent event) { //_CODE_:slider2d1:849430:
-  println("slider2d1 - GSlider2D >> GEvent." + event + " @ " + millis());
-} //_CODE_:slider2d1:849430:
-
-public void slider1_change1(GSlider source, GEvent event) { //_CODE_:slider1:328018:
-  println("slider1 - GSlider >> GEvent." + event + " @ " + millis());
-} //_CODE_:slider1:328018:
-
-public void textarea1_change1(GTextArea source, GEvent event) { //_CODE_:textarea1:354643:
-  println("textarea1 - GTextArea >> GEvent." + event + " @ " + millis());
-} //_CODE_:textarea1:354643:
+public void RedoButtonClick(GImageButton source, GEvent event) { //_CODE_:RedoButton:914227:
+  println("Redo clicked! Stack size: " + redoStack.size());
+  if(redoStack.size() > 0) {
+    PImage next = redoStack.remove(redoStack.size() - 1);
+    undoStack.add(get());
+    set(0, 0, next);  // Use set() instead of image()
+    println("Redo complete! New stack size: " + redoStack.size());
+  }
+} //_CODE_:RedoButton:914227:
 
 public void UndoButtonClick(GImageButton source, GEvent event) { //_CODE_:UndoButton:312280:
   println("Undo clicked! Stack size: " + undoStack.size());
@@ -67,15 +65,41 @@ public void UndoButtonClick(GImageButton source, GEvent event) { //_CODE_:UndoBu
   }
 } //_CODE_:UndoButton:312280:
 
-public void RedoButtonClick(GImageButton source, GEvent event) { //_CODE_:RedoButton:914227:
-  println("Redo clicked! Stack size: " + redoStack.size());
-  if(redoStack.size() > 0) {
-    PImage next = redoStack.remove(redoStack.size() - 1);
-    undoStack.add(get());
-    set(0, 0, next);  // Use set() instead of image()
-    println("Redo complete! New stack size: " + redoStack.size());
-  }
-} //_CODE_:RedoButton:914227:
+public void ColorWheel2DSliderChanged(GSlider2D source, GEvent event) { //_CODE_:ColorWheel2DSlider:867200:
+  // Get x,y values from slider (0.0 to 1.0)
+  float x = ColorWheel2DSlider.getValueXF();
+  float y = ColorWheel2DSlider.getValueYF();
+  
+  // Convert to centered coordinates (-0.5 to 0.5)
+  float centerX = x - 0.5;
+  float centerY = y - 0.5;
+  
+  // Calculate angle (in radians)
+  float angle = atan2(centerY, centerX);
+  if (angle < 0) angle += TWO_PI; // Make it 0 to 2π
+  
+  // Width parameter for Gaussian (controls color spread)
+  float w = 1.0; // Tune this value (try 0.5 to 2.0)
+  
+  // Calculate RGB using your Gaussian formulas
+  float r = 255 * exp(-pow(angle - PI/2, 2) / w);
+  float g = 255 * exp(-pow(angle - 7*PI/6, 2) / w);
+  float b = 255 * exp(-pow(angle - 11*PI/6, 2) / w);
+  
+  // Handle wraparound for red (add a second peak at angle + 2π)
+  r += 255 * exp(-pow(angle - PI/2 + TWO_PI, 2) / w);
+  r += 255 * exp(-pow(angle - PI/2 - TWO_PI, 2) / w);
+  
+  // Constrain values to 0-255
+  r = constrain(r, 0, 255);
+  g = constrain(g, 0, 255);
+  b = constrain(b, 0, 255);
+  
+  currentColor = color(r, g, b);
+  
+  println("Angle: " + degrees(angle) + "°, RGB: " + r + ", " + g + ", " + b);
+} //_CODE_:ColorWheel2DSlider:867200:
+
 
 
 // Create all the GUI controls. 
@@ -89,13 +113,13 @@ public void createGUI(){
   Settings.noLoop();
   Settings.setActionOnClose(G4P.KEEP_OPEN);
   Settings.addDrawHandler(this, "win_draw1");
-  PencilButton = new GButton(Settings, 220, 55, 80, 30);
+  PencilButton = new GButton(Settings, 110, 55, 80, 30);
   PencilButton.setText("Pencil");
   PencilButton.addEventHandler(this, "PencilButtonClick");
-  EraserButton = new GButton(Settings, 220, 95, 80, 30);
+  EraserButton = new GButton(Settings, 110, 95, 80, 30);
   EraserButton.setText("Eraser");
   EraserButton.addEventHandler(this, "EraserButtonClick");
-  ToolSlider = new GCustomSlider(Settings, 110, 150, 100, 40, "grey_blue");
+  ToolSlider = new GCustomSlider(Settings, 55, 190, 100, 40, "grey_blue");
   ToolSlider.setShowValue(true);
   ToolSlider.setLimits(15.0, 0.1, 50.0);
   ToolSlider.setNbrTicks(5);
@@ -103,7 +127,7 @@ public void createGUI(){
   ToolSlider.setNumberFormat(G4P.DECIMAL, 2);
   ToolSlider.setOpaque(false);
   ToolSlider.addEventHandler(this, "ToolSliderChanged");
-  LineButton = new GButton(Settings, 220, 135, 80, 30);
+  LineButton = new GButton(Settings, 110, 135, 80, 30);
   LineButton.setText("Line");
   LineButton.addEventHandler(this, "LineButtonClick");
   RectangleButton = new GButton(Settings, 20, 55, 80, 30);
@@ -114,24 +138,17 @@ public void createGUI(){
   TriangleButton.setText("Triangle");
   TriangleButton.setLocalColorScheme(GCScheme.GOLD_SCHEME);
   TriangleButton.addEventHandler(this, "TriangleButtonClick");
-  slider2d1 = new GSlider2D(Settings, 16, 205, 128, 128);
-  slider2d1.setLimitsX(0.5, 0.0, 1.0);
-  slider2d1.setLimitsY(0.5, 0.0, 1.0);
-  slider2d1.setNumberFormat(G4P.DECIMAL, 2);
-  slider2d1.setOpaque(true);
-  slider2d1.addEventHandler(this, "slider2d1_change1");
-  slider1 = new GSlider(Settings, 15, 340, 131, 40, 10.0);
-  slider1.setLimits(0.5, 0.0, 1.0);
-  slider1.setNumberFormat(G4P.DECIMAL, 2);
-  slider1.setOpaque(false);
-  slider1.addEventHandler(this, "slider1_change1");
-  textarea1 = new GTextArea(Settings, 170, 205, 120, 80, G4P.SCROLLBARS_NONE);
-  textarea1.setOpaque(true);
-  textarea1.addEventHandler(this, "textarea1_change1");
   RedoButton = new GImageButton(Settings, 275, 10, 35, 35, new String[] { "ComicEngineRedoButton.png", "ComicEngineRedoButton.png", "ComicEngineRedoButton.png" } );
   RedoButton.addEventHandler(this, "RedoButtonClick");
   UndoButton = new GImageButton(Settings, 230, 10, 35, 35, new String[] { "ComicEngineUndoButton.png", "ComicEngineUndoButton.png", "ComicEngineUndoButton.png" } );
   UndoButton.addEventHandler(this, "UndoButtonClick");
+  ColorWheel2DSlider = new GSlider2D(Settings, 21, 269, 170, 170);
+  ColorWheel2DSlider.setLimitsX(1.0, 0.0, 1.0);
+  ColorWheel2DSlider.setLimitsY(1.0, 0.0, 1.0);
+  ColorWheel2DSlider.setNumberFormat(G4P.DECIMAL, 2);
+  ColorWheel2DSlider.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
+  ColorWheel2DSlider.setOpaque(true);
+  ColorWheel2DSlider.addEventHandler(this, "ColorWheel2DSliderChanged");
   Settings.loop();
 }
 
@@ -144,8 +161,6 @@ GCustomSlider ToolSlider;
 GButton LineButton; 
 GButton RectangleButton; 
 GButton TriangleButton; 
-GSlider2D slider2d1; 
-GSlider slider1; 
-GTextArea textarea1; 
 GImageButton RedoButton; 
 GImageButton UndoButton; 
+GSlider2D ColorWheel2DSlider; 
