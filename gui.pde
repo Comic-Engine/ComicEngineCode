@@ -74,21 +74,29 @@ public void ColorWheel2DSliderChanged(GSlider2D source, GEvent event) { //_CODE_
   float centerX = x - 0.5;
   float centerY = y - 0.5;
   
-  // Calculate angle (in radians)
-  float angle = atan2(centerY, centerX);
-  if (angle < 0) angle += TWO_PI; // Make it 0 to 2π
+  // Create PVector and get heading
+  PVector vec = new PVector(centerX, centerY);
+  float angle = vec.heading();
+  if (angle < 0) angle += TWO_PI;
   
   // Width parameter for Gaussian (controls color spread)
-  float w = 1.0; // Tune this value (try 0.5 to 2.0)
+  float w = 1.0;
   
-  // Calculate RGB using your Gaussian formulas
+  // Calculate RGB using Gaussian formulas
   float r = 255 * exp(-pow(angle - PI/2, 2) / w);
   float g = 255 * exp(-pow(angle - 7*PI/6, 2) / w);
   float b = 255 * exp(-pow(angle - 11*PI/6, 2) / w);
   
-  // Handle wraparound for red (add a second peak at angle + 2π)
+  // Handle wraparound for red
   r += 255 * exp(-pow(angle - PI/2 + TWO_PI, 2) / w);
   r += 255 * exp(-pow(angle - PI/2 - TWO_PI, 2) / w);
+  
+  // Handle wraparound for blue
+  b += 255 * exp(-pow(angle - 11*PI/6 + TWO_PI, 2) / w);
+  b += 255 * exp(-pow(angle - 11*PI/6 - TWO_PI, 2) / w);
+
+  // Green at 210° doesn't cross the boundary, so no wraparound needed
+
   
   // Constrain values to 0-255
   r = constrain(r, 0, 255);
