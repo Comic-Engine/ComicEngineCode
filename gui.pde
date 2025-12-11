@@ -75,8 +75,8 @@ public void ColorWheel2DSliderChanged(GSlider2D source, GEvent event) { //_CODE_
   float centerY = -(y - 0.5);
   
   // Create PVector and get heading
-  PVector vec = new PVector(centerX, centerY);
-  float angle = vec.heading();
+  PVector V = new PVector(centerX, centerY);
+  float angle = V.heading();
   if (angle < 0) angle += TWO_PI; // No negative angles
   
   // Width parameter for Gaussian (controls color spread)
@@ -103,14 +103,74 @@ public void ColorWheel2DSliderChanged(GSlider2D source, GEvent event) { //_CODE_
   g = constrain(g, 0, 255);
   b = constrain(b, 0, 255);
   
-  currentColor = color(r, g, b);  
-    // Update the current tool's color if a tool is active
+  baseColor = color(r, g, b);
+  
+  // Apply brightness transformation
+  float finalR, finalG, finalB;
+  if (brightnessValue < 0.5) {
+    // From white to color (0.0 to 0.5)
+    float t = brightnessValue * 2; // Map 0.0-0.5 to 0.0-1.0
+    finalR = 255 + (r - 255) * t;
+    finalG = 255 + (g - 255) * t;
+    finalB = 255 + (b - 255) * t;
+  } 
+  else {
+    // From color to black (0.5 to 1.0)
+    float t = (brightnessValue - 0.5) * 2; // Map 0.5-1.0 to 0.0-1.0
+    finalR = r * (1 - t);
+    finalG = g * (1 - t);
+    finalB = b * (1 - t);
+  }
+  
+  currentColor = color(finalR, finalG, finalB);
+  
+  // Update current tool's color
   if(currentTool != null) {
     currentTool.toolColor = currentColor;
   }
   
-  println("Angle: " + degrees(angle) + "°, RGB: " + r + ", " + g + ", " + b);
+  println("Angle: " + degrees(angle) + "°, Base RGB: " + r + ", " + g + ", " + b);
+
 } //_CODE_:ColorWheel2DSlider:867200:
+
+public void ColorBrightnessSliderChanged(GCustomSlider source, GEvent event) { //_CODE_:ColorBrightnessSlider:484316:
+  brightnessValue = source.getValueF(); // 0.0 to 1.0
+  
+  // Get base color components
+  float r = red(baseColor);
+  float g = green(baseColor);
+  float b = blue(baseColor);
+  
+  // Apply brightness: white → color → black
+  float finalR, finalG, finalB;
+  if (brightnessValue < 0.5) {
+    // From white to color (0.0 to 0.5)
+    float t = brightnessValue * 2;
+    finalR = 255 + (r - 255) * t;
+    finalG = 255 + (g - 255) * t;
+    finalB = 255 + (b - 255) * t;
+  } else {
+    // From color to black (0.5 to 1.0)
+    float t = (brightnessValue - 0.5) * 2;
+    finalR = r * (1 - t);
+    finalG = g * (1 - t);
+    finalB = b * (1 - t);
+  }
+  
+  currentColor = color(finalR, finalG, finalB);
+  
+  // Update tool
+  if(currentTool != null) {
+    currentTool.toolColor = currentColor;
+  }
+  
+  println("Brightness: " + brightnessValue + ", Final RGB: " + finalR + ", " + finalG + ", " + finalB);
+} //_CODE_:ColorBrightnessSlider:484316:
+
+public void GridCheckboxClicked(GCheckbox source, GEvent event) { //_CODE_:GridCheckbox:956630:
+  showGrid = !showGrid; // Toggle on/off
+  println("Grid: " + (showGrid ? "ON" : "OFF"));
+} //_CODE_:GridCheckbox:956630:
 
 
 
@@ -154,13 +214,25 @@ public void createGUI(){
   RedoButton.addEventHandler(this, "RedoButtonClick");
   UndoButton = new GImageButton(Settings, 230, 10, 35, 35, new String[] { "ComicEngineUndoButton.png", "ComicEngineUndoButton.png", "ComicEngineUndoButton.png" } );
   UndoButton.addEventHandler(this, "UndoButtonClick");
-  ColorWheel2DSlider = new GSlider2D(Settings, 21, 269, 170, 170);
+  ColorWheel2DSlider = new GSlider2D(Settings, 20, 250, 170, 170);
   ColorWheel2DSlider.setLimitsX(0.5, 0.0, 1.0);
   ColorWheel2DSlider.setLimitsY(0.5, 0.0, 1.0);
   ColorWheel2DSlider.setNumberFormat(G4P.DECIMAL, 2);
   ColorWheel2DSlider.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
   ColorWheel2DSlider.setOpaque(true);
   ColorWheel2DSlider.addEventHandler(this, "ColorWheel2DSliderChanged");
+  ColorBrightnessSlider = new GCustomSlider(Settings, 20, 430, 170, 30, "grey_blue");
+  ColorBrightnessSlider.setLimits(0.5, 0.0, 1.0);
+  ColorBrightnessSlider.setNumberFormat(G4P.DECIMAL, 2);
+  ColorBrightnessSlider.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
+  ColorBrightnessSlider.setOpaque(false);
+  ColorBrightnessSlider.addEventHandler(this, "ColorBrightnessSliderChanged");
+  GridCheckbox = new GCheckbox(Settings, 195, 200, 100, 20);
+  GridCheckbox.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
+  GridCheckbox.setText("Grid Lines");
+  GridCheckbox.setOpaque(false);
+  GridCheckbox.addEventHandler(this, "GridCheckboxClicked");
+  GridCheckbox.setSelected(true);
   Settings.loop();
 }
 
@@ -176,3 +248,5 @@ GButton TriangleButton;
 GImageButton RedoButton; 
 GImageButton UndoButton; 
 GSlider2D ColorWheel2DSlider; 
+GCustomSlider ColorBrightnessSlider; 
+GCheckbox GridCheckbox; 
