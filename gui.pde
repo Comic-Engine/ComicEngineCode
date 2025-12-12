@@ -182,6 +182,21 @@ public void GridThicknessSliderChanged(GCustomSlider source, GEvent event) { //_
   gridSize = source.getValueF();
 } //_CODE_:GridThicknessSlider:449857:
 
+public void ZoomInButtonClick(GImageButton source, GEvent event) { //_CODE_:ZoomInButton:310758:
+  zoomIn(1.5);
+  println("Zoom Level: " + zoomLevel);
+} //_CODE_:ZoomInButton:310758:
+
+public void ZoomOutButtonClick(GImageButton source, GEvent event) { //_CODE_:ZoomOutButton:264610:
+  zoomOut(1.5);
+  println("Zoom Level: " + zoomLevel);
+} //_CODE_:ZoomOutButton:264610:
+
+public void ZoomResetClick(GButton source, GEvent event) { //_CODE_:ZoomReset:711430:
+  resetZoom();
+  println("Zoom Reset to 1.0");
+} //_CODE_:ZoomReset:711430:
+
 
 
 // Create all the GUI controls. 
@@ -191,11 +206,11 @@ public void createGUI(){
   G4P.setGlobalColorScheme(GCScheme.BLUE_SCHEME);
   G4P.setMouseOverEnabled(false);
   surface.setTitle("Sketch Window");
-  Settings = GWindow.getWindow(this, "Settings", 0, 0, 320, 480, JAVA2D);
+  Settings = GWindow.getWindow(this, "Settings", 0, 0, 480, 480, JAVA2D);
   Settings.noLoop();
   Settings.setActionOnClose(G4P.KEEP_OPEN);
   Settings.addDrawHandler(this, "win_draw1");
-  PencilButton = new GButton(Settings, 110, 55, 80, 30);
+  PencilButton = new GButton(Settings, 110, 53, 80, 30);
   PencilButton.setText("Pencil");
   PencilButton.addEventHandler(this, "PencilButtonClick");
   EraserButton = new GButton(Settings, 110, 95, 80, 30);
@@ -216,13 +231,13 @@ public void createGUI(){
   RectangleButton.setText("Rectangle");
   RectangleButton.setLocalColorScheme(GCScheme.GOLD_SCHEME);
   RectangleButton.addEventHandler(this, "RectangleButtonClick");
-  TriangleButton = new GButton(Settings, 20, 95, 80, 30);
+  TriangleButton = new GButton(Settings, 20, 94, 80, 30);
   TriangleButton.setText("Triangle");
   TriangleButton.setLocalColorScheme(GCScheme.GOLD_SCHEME);
   TriangleButton.addEventHandler(this, "TriangleButtonClick");
-  RedoButton = new GImageButton(Settings, 275, 10, 35, 35, new String[] { "ComicEngineRedoButton.png", "ComicEngineRedoButton.png", "ComicEngineRedoButton.png" } );
+  RedoButton = new GImageButton(Settings, 380, 10, 50, 50, new String[] { "ComicEngineRedoButton.png", "ComicEngineRedoButton.png", "ComicEngineRedoButton.png" } );
   RedoButton.addEventHandler(this, "RedoButtonClick");
-  UndoButton = new GImageButton(Settings, 230, 10, 35, 35, new String[] { "ComicEngineUndoButton.png", "ComicEngineUndoButton.png", "ComicEngineUndoButton.png" } );
+  UndoButton = new GImageButton(Settings, 320, 10, 50, 50, new String[] { "ComicEngineUndoButton.png", "ComicEngineUndoButton.png", "ComicEngineUndoButton.png" } );
   UndoButton.addEventHandler(this, "UndoButtonClick");
   ColorWheel2DSlider = new GSlider2D(Settings, 20, 250, 170, 170);
   ColorWheel2DSlider.setLimitsX(0.5, 0.0, 1.0);
@@ -251,6 +266,14 @@ public void createGUI(){
   GridThicknessSlider.setNumberFormat(G4P.DECIMAL, 0);
   GridThicknessSlider.setOpaque(false);
   GridThicknessSlider.addEventHandler(this, "GridThicknessSliderChanged");
+  ZoomInButton = new GImageButton(Settings, 380, 75, 50, 50, new String[] { "ZoomInButton.png", "ZoomInButton.png", "ZoomInButton.png" } );
+  ZoomInButton.addEventHandler(this, "ZoomInButtonClick");
+  ZoomOutButton = new GImageButton(Settings, 320, 75, 50, 50, new String[] { "ZoomOutButton.png", "ZoomOutButton.png", "ZoomOutButton.png" } );
+  ZoomOutButton.addEventHandler(this, "ZoomOutButtonClick");
+  ZoomReset = new GButton(Settings, 355, 138, 80, 30);
+  ZoomReset.setText("Zoom Reset");
+  ZoomReset.setLocalColorScheme(GCScheme.RED_SCHEME);
+  ZoomReset.addEventHandler(this, "ZoomResetClick");
   Settings.loop();
 }
 
@@ -269,3 +292,6 @@ GSlider2D ColorWheel2DSlider;
 GCustomSlider ColorBrightnessSlider; 
 GCheckbox GridCheckbox; 
 GCustomSlider GridThicknessSlider; 
+GImageButton ZoomInButton; 
+GImageButton ZoomOutButton; 
+GButton ZoomReset; 
