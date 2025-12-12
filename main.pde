@@ -8,7 +8,7 @@ color currentColor = color(0); // Black
 float brightnessValue = 1.0;
 
 boolean showGrid = true;
-int gridSize = 50; // Pixels between grid lines
+float gridSize = 50.0; // Pixels between grid lines
 PGraphics drawingLayer; // Seperate lauer for drawing (no grid)
 
 ArrayList<PImage> undoStack = new ArrayList<PImage>();
