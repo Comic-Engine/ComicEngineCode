@@ -11,7 +11,7 @@ class RectangleTool extends Tool {
     startAction();
     startX = mouseX;
     startY = mouseY;
-    beforeDrag = drawingLayer.get();  // snapshot for preview only
+    beforeDrag = drawingLayer.get();
     dragging = true;
   }
 
@@ -60,27 +60,23 @@ class TriangleTool extends Tool {
   
   void mousePressed() {
     startAction();
-    startX = screenToCanvasX(mouseX);
-    startY = screenToCanvasY(mouseY);
+    startX = mouseX;
+    startY = mouseY;
     beforeDrag = drawingLayer.get();
     dragging = true;
   }
   
   void mouseDragged() {
     if(dragging){
-      float canvasX = screenToCanvasX(mouseX);
-      float canvasY = screenToCanvasY(mouseY);
-      
       drawingLayer.beginDraw();
-      drawingLayer.background(255);
       drawingLayer.image(beforeDrag, 0, 0);
       drawingLayer.stroke(toolColor);
-      drawingLayer.strokeWeight(toolSize / zoomLevel);
+      drawingLayer.strokeWeight(toolSize);
       drawingLayer.noFill();
       
       // Calculate triangle points (equilateral-ish)
-      float w = abs(canvasX - startX) * 2;
-      float h = abs(canvasY - startY) * 2;
+      float w = abs(mouseX - startX) * 2;
+      float h = abs(mouseY - startY) * 2;
       float topX = startX;
       float topY = startY - h/2;
       float leftX = startX - w/2;
@@ -95,19 +91,15 @@ class TriangleTool extends Tool {
   
   void mouseReleased() {
     if(dragging){
-      float canvasX = screenToCanvasX(mouseX);
-      float canvasY = screenToCanvasY(mouseY);
-      
       drawingLayer.beginDraw();
-      drawingLayer.background(255);
       drawingLayer.image(beforeDrag, 0, 0);
       drawingLayer.stroke(toolColor);
-      drawingLayer.strokeWeight(toolSize / zoomLevel);
+      drawingLayer.strokeWeight(toolSize);
       drawingLayer.noFill();
       
       // Calculate triangle points
-      float w = abs(canvasX - startX) * 2;
-      float h = abs(canvasY - startY) * 2;
+      float w = abs(mouseX - startX) * 2;
+      float h = abs(mouseY - startY) * 2;
       float topX = startX;
       float topY = startY - h/2;
       float leftX = startX - w/2;
@@ -135,26 +127,22 @@ class EllipseTool extends Tool {
   
   void mousePressed() {
     startAction();
-    startX = screenToCanvasX(mouseX);
-    startY = screenToCanvasY(mouseY);
+    startX = mouseX;
+    startY = mouseY;
     beforeDrag = drawingLayer.get();
     dragging = true;
   }
   
   void mouseDragged() {
     if(dragging){
-      float canvasX = screenToCanvasX(mouseX);
-      float canvasY = screenToCanvasY(mouseY);
-      
       drawingLayer.beginDraw();
-      drawingLayer.background(255);
       drawingLayer.image(beforeDrag, 0, 0);
       drawingLayer.stroke(toolColor);
-      drawingLayer.strokeWeight(toolSize / zoomLevel);
+      drawingLayer.strokeWeight(toolSize);
       drawingLayer.noFill();
       drawingLayer.ellipseMode(CENTER);
-      float w = abs(canvasX - startX) * 2;
-      float h = abs(canvasY - startY) * 2;
+      float w = abs(mouseX - startX) * 2;
+      float h = abs(mouseY - startY) * 2;
       drawingLayer.ellipse(startX, startY, w, h);
       drawingLayer.endDraw();
     }
@@ -162,18 +150,14 @@ class EllipseTool extends Tool {
   
   void mouseReleased() {
     if(dragging){
-      float canvasX = screenToCanvasX(mouseX);
-      float canvasY = screenToCanvasY(mouseY);
-      
       drawingLayer.beginDraw();
-      drawingLayer.background(255);
       drawingLayer.image(beforeDrag, 0, 0);
       drawingLayer.stroke(toolColor);
-      drawingLayer.strokeWeight(toolSize / zoomLevel);
+      drawingLayer.strokeWeight(toolSize);
       drawingLayer.noFill();
       drawingLayer.ellipseMode(CENTER);
-      float w = abs(canvasX - startX) * 2;
-      float h = abs(canvasY - startY) * 2;
+      float w = abs(mouseX - startX) * 2;
+      float h = abs(mouseY - startY) * 2;
       drawingLayer.ellipse(startX, startY, w, h);
       drawingLayer.endDraw();
       
@@ -194,26 +178,22 @@ class StarTool extends Tool {
   
   void mousePressed() {
     startAction();
-    startX = screenToCanvasX(mouseX);
-    startY = screenToCanvasY(mouseY);
+    startX = mouseX;
+    startY = mouseY;
     beforeDrag = drawingLayer.get();
     dragging = true;
   }
   
   void mouseDragged() {
     if(dragging){
-      float canvasX = screenToCanvasX(mouseX);
-      float canvasY = screenToCanvasY(mouseY);
-      
       drawingLayer.beginDraw();
-      drawingLayer.background(255);
       drawingLayer.image(beforeDrag, 0, 0);
       drawingLayer.stroke(toolColor);
-      drawingLayer.strokeWeight(toolSize / zoomLevel);
+      drawingLayer.strokeWeight(toolSize);
       drawingLayer.noFill();
       
       // Draw a 5-pointed star
-      float radius = abs(canvasX - startX);
+      float radius = abs(mouseX - startX);
       drawStar(drawingLayer, startX, startY, radius, radius * 0.4, 5);
       
       drawingLayer.endDraw();
@@ -222,18 +202,14 @@ class StarTool extends Tool {
   
   void mouseReleased() {
     if(dragging){
-      float canvasX = screenToCanvasX(mouseX);
-      float canvasY = screenToCanvasY(mouseY);
-      
       drawingLayer.beginDraw();
-      drawingLayer.background(255);
       drawingLayer.image(beforeDrag, 0, 0);
       drawingLayer.stroke(toolColor);
-      drawingLayer.strokeWeight(toolSize / zoomLevel);
+      drawingLayer.strokeWeight(toolSize);
       drawingLayer.noFill();
       
       // Draw a 5-pointed star
-      float radius = abs(canvasX - startX);
+      float radius = abs(mouseX - startX);
       drawStar(drawingLayer, startX, startY, radius, radius * 0.4, 5);
       
       drawingLayer.endDraw();

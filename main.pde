@@ -88,15 +88,6 @@ void mouseReleased() {
   }
 }
 
-// Transform screen coordinates to canvas coordinates (accounting for zoom/pan)
-float screenToCanvasX(float screenX) {
-  return (screenX - panX) / zoomLevel;
-}
-
-float screenToCanvasY(float screenY) {
-  return (screenY - panY) / zoomLevel;
-}
-
 // Zoom functions
 void zoomIn(float factor) {
   float newZoom = constrain(zoomLevel * factor, minZoom, maxZoom);

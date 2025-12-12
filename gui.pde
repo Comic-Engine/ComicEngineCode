@@ -209,6 +209,22 @@ public void SprayPaintButtonClick(GButton source, GEvent event) { //_CODE_:Spray
   currentTool = new SprayPaintTool(brushSize, currentColor);
 } //_CODE_:SprayPaintButton:955701:
 
+public void SpeechBubbleButtonClick(GButton source, GEvent event) { //_CODE_:SpeechBubbleButton:288353:
+  currentTool = new SpeechBubbleTool(brushSize, currentColor);
+} //_CODE_:SpeechBubbleButton:288353:
+
+public void YellBubbleButtonClick(GButton source, GEvent event) { //_CODE_:YellBubbleButton:906303:
+  currentTool = new YellBubbleTool(brushSize, currentColor);
+} //_CODE_:YellBubbleButton:906303:
+
+public void AnnounceBubbleButtonClick(GButton source, GEvent event) { //_CODE_:AnounceBubbleButton:900458:
+  currentTool = new AnnounceBubbleTool(brushSize, currentColor);
+} //_CODE_:AnounceBubbleButton:900458:
+
+public void ThoughtBubbleButtonClick(GButton source, GEvent event) { //_CODE_:ThoughtBubbleButton:691306:
+  currentTool = new ThoughtBubbleTool(brushSize, currentColor);
+} //_CODE_:ThoughtBubbleButton:691306:
+
 
 
 // Create all the GUI controls. 
@@ -228,7 +244,7 @@ public void createGUI(){
   EraserButton = new GButton(Settings, 110, 95, 80, 30);
   EraserButton.setText("Eraser");
   EraserButton.addEventHandler(this, "EraserButtonClick");
-  ToolSlider = new GCustomSlider(Settings, 205, 240, 100, 50, "grey_blue");
+  ToolSlider = new GCustomSlider(Settings, 200, 250, 100, 50, "grey_blue");
   ToolSlider.setShowValue(true);
   ToolSlider.setLimits(15.0, 0.1, 50.0);
   ToolSlider.setNbrTicks(5);
@@ -251,26 +267,26 @@ public void createGUI(){
   RedoButton.addEventHandler(this, "RedoButtonClick");
   UndoButton = new GImageButton(Settings, 320, 10, 50, 50, new String[] { "ComicEngineUndoButton.png", "ComicEngineUndoButton.png", "ComicEngineUndoButton.png" } );
   UndoButton.addEventHandler(this, "UndoButtonClick");
-  ColorWheel2DSlider = new GSlider2D(Settings, 20, 250, 170, 170);
+  ColorWheel2DSlider = new GSlider2D(Settings, 15, 250, 170, 170);
   ColorWheel2DSlider.setLimitsX(0.5, 0.0, 1.0);
   ColorWheel2DSlider.setLimitsY(0.5, 0.0, 1.0);
   ColorWheel2DSlider.setNumberFormat(G4P.DECIMAL, 2);
   ColorWheel2DSlider.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
   ColorWheel2DSlider.setOpaque(true);
   ColorWheel2DSlider.addEventHandler(this, "ColorWheel2DSliderChanged");
-  ColorBrightnessSlider = new GCustomSlider(Settings, 20, 430, 170, 30, "grey_blue");
+  ColorBrightnessSlider = new GCustomSlider(Settings, 15, 440, 170, 30, "grey_blue");
   ColorBrightnessSlider.setLimits(0.5, 0.0, 1.0);
   ColorBrightnessSlider.setNumberFormat(G4P.DECIMAL, 2);
   ColorBrightnessSlider.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
   ColorBrightnessSlider.setOpaque(false);
   ColorBrightnessSlider.addEventHandler(this, "ColorBrightnessSliderChanged");
-  GridCheckbox = new GCheckbox(Settings, 205, 330, 100, 20);
+  GridCheckbox = new GCheckbox(Settings, 325, 310, 100, 20);
   GridCheckbox.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   GridCheckbox.setText("Grid Lines");
   GridCheckbox.setOpaque(false);
   GridCheckbox.addEventHandler(this, "GridCheckboxClicked");
   GridCheckbox.setSelected(true);
-  GridThicknessSlider = new GCustomSlider(Settings, 205, 360, 100, 50, "grey_blue");
+  GridThicknessSlider = new GCustomSlider(Settings, 325, 250, 100, 50, "grey_blue");
   GridThicknessSlider.setShowValue(true);
   GridThicknessSlider.setLimits(40.0, 5.0, 75.0);
   GridThicknessSlider.setNbrTicks(14);
@@ -297,6 +313,53 @@ public void createGUI(){
   SprayPaintButton = new GButton(Settings, 110, 175, 80, 30);
   SprayPaintButton.setText("Spray Paint");
   SprayPaintButton.addEventHandler(this, "SprayPaintButtonClick");
+  SpeechBubbleButton = new GButton(Settings, 200, 55, 80, 30);
+  SpeechBubbleButton.setText("Speech Bubble");
+  SpeechBubbleButton.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  SpeechBubbleButton.addEventHandler(this, "SpeechBubbleButtonClick");
+  YellBubbleButton = new GButton(Settings, 200, 95, 80, 30);
+  YellBubbleButton.setText("Yell Bubble");
+  YellBubbleButton.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  YellBubbleButton.addEventHandler(this, "YellBubbleButtonClick");
+  AnounceBubbleButton = new GButton(Settings, 200, 135, 80, 30);
+  AnounceBubbleButton.setText("Anounce Bubble");
+  AnounceBubbleButton.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  AnounceBubbleButton.addEventHandler(this, "AnnounceBubbleButtonClick");
+  ThoughtBubbleButton = new GButton(Settings, 200, 175, 80, 30);
+  ThoughtBubbleButton.setText("Thought Bubble");
+  ThoughtBubbleButton.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  ThoughtBubbleButton.addEventHandler(this, "ThoughtBubbleButtonClick");
+  ThicknessLabel = new GLabel(Settings, 180, 230, 140, 20);
+  ThicknessLabel.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  ThicknessLabel.setText("Tool Thickness");
+  ThicknessLabel.setOpaque(false);
+  GridLabel = new GLabel(Settings, 305, 230, 140, 20);
+  GridLabel.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  GridLabel.setText("Grid Size");
+  GridLabel.setOpaque(false);
+  ColorWheelLabel = new GLabel(Settings, 10, 215, 180, 20);
+  ColorWheelLabel.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  ColorWheelLabel.setText("Color Wheel (Angle Based)");
+  ColorWheelLabel.setOpaque(false);
+  ColorBrightnessLabel = new GLabel(Settings, 0, 425, 200, 20);
+  ColorBrightnessLabel.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  ColorBrightnessLabel.setText("Color Brightness (White to Black)");
+  ColorBrightnessLabel.setOpaque(false);
+  GLabel = new GLabel(Settings, 0, 375, 15, 15);
+  GLabel.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  GLabel.setText("_");
+  GLabel.setLocalColorScheme(GCScheme.GREEN_SCHEME);
+  GLabel.setOpaque(true);
+  RLabel = new GLabel(Settings, 95, 235, 15, 15);
+  RLabel.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  RLabel.setText("_");
+  RLabel.setLocalColorScheme(GCScheme.RED_SCHEME);
+  RLabel.setOpaque(true);
+  BLabel = new GLabel(Settings, 185, 375, 15, 15);
+  BLabel.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  BLabel.setText("_");
+  BLabel.setLocalColorScheme(GCScheme.CYAN_SCHEME);
+  BLabel.setOpaque(true);
   Settings.loop();
 }
 
@@ -321,3 +384,14 @@ GButton ZoomReset;
 GButton EllipseButton; 
 GButton StarButton; 
 GButton SprayPaintButton; 
+GButton SpeechBubbleButton; 
+GButton YellBubbleButton; 
+GButton AnounceBubbleButton; 
+GButton ThoughtBubbleButton; 
+GLabel ThicknessLabel; 
+GLabel GridLabel; 
+GLabel ColorWheelLabel; 
+GLabel ColorBrightnessLabel; 
+GLabel GLabel; 
+GLabel RLabel; 
+GLabel BLabel; 
