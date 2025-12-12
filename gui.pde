@@ -205,6 +205,10 @@ public void StarButtonClick(GButton source, GEvent event) { //_CODE_:StarButton:
   currentTool = new StarTool(brushSize, currentColor);
 } //_CODE_:StarButton:523301:
 
+public void SprayPaintButtonClick(GButton source, GEvent event) { //_CODE_:SprayPaintButton:955701:
+  currentTool = new SprayPaintTool(brushSize, currentColor);
+} //_CODE_:SprayPaintButton:955701:
+
 
 
 // Create all the GUI controls. 
@@ -232,7 +236,7 @@ public void createGUI(){
   ToolSlider.setNumberFormat(G4P.DECIMAL, 2);
   ToolSlider.setOpaque(false);
   ToolSlider.addEventHandler(this, "ToolSliderChanged");
-  LineButton = new GButton(Settings, 109, 135, 80, 30);
+  LineButton = new GButton(Settings, 110, 135, 80, 30);
   LineButton.setText("Line");
   LineButton.addEventHandler(this, "LineButtonClick");
   RectangleButton = new GButton(Settings, 20, 55, 80, 30);
@@ -278,9 +282,9 @@ public void createGUI(){
   ZoomInButton.addEventHandler(this, "ZoomInButtonClick");
   ZoomOutButton = new GImageButton(Settings, 320, 75, 50, 50, new String[] { "ZoomOutButton.png", "ZoomOutButton.png", "ZoomOutButton.png" } );
   ZoomOutButton.addEventHandler(this, "ZoomOutButtonClick");
-  ZoomReset = new GButton(Settings, 355, 138, 80, 30);
+  ZoomReset = new GButton(Settings, 335, 135, 80, 30);
   ZoomReset.setText("Zoom Reset");
-  ZoomReset.setLocalColorScheme(GCScheme.RED_SCHEME);
+  ZoomReset.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
   ZoomReset.addEventHandler(this, "ZoomResetClick");
   EllipseButton = new GButton(Settings, 20, 135, 80, 30);
   EllipseButton.setText("Ellipse");
@@ -290,6 +294,9 @@ public void createGUI(){
   StarButton.setText("Star");
   StarButton.setLocalColorScheme(GCScheme.GOLD_SCHEME);
   StarButton.addEventHandler(this, "StarButtonClick");
+  SprayPaintButton = new GButton(Settings, 110, 175, 80, 30);
+  SprayPaintButton.setText("Spray Paint");
+  SprayPaintButton.addEventHandler(this, "SprayPaintButtonClick");
   Settings.loop();
 }
 
@@ -313,3 +320,4 @@ GImageButton ZoomOutButton;
 GButton ZoomReset; 
 GButton EllipseButton; 
 GButton StarButton; 
+GButton SprayPaintButton; 
