@@ -11,37 +11,38 @@ class RectangleTool extends Tool {
     startAction();
     startX = mouseX;
     startY = mouseY;
-    beforeDrag = get();  // snapshot for preview only
+    beforeDrag = drawingLayer.get();  // snapshot for preview only
     dragging = true;
   }
 
   void mouseDragged() {
     if(dragging){
-      image(beforeDrag, 0, 0); // restore original canvas
-      stroke(toolColor);
-      strokeWeight(toolSize);
-      noFill();
-      rectMode(CENTER);
+      drawingLayer.beginDraw();
+      drawingLayer.image(beforeDrag, 0, 0);
+      drawingLayer.stroke(toolColor);
+      drawingLayer.strokeWeight(toolSize);
+      drawingLayer.noFill();
+      drawingLayer.rectMode(CENTER);
       float w = abs(mouseX - startX) * 2;
       float h = abs(mouseY - startY) * 2;
-      rect(startX, startY, w, h); // draw preview
+      drawingLayer.rect(startX, startY, w, h);
+      drawingLayer.endDraw();
     }
   }
 
   void mouseReleased() {
     if(dragging){
-      // **Don't restore beforeDrag**, we want to draw on top of the current canvas
-      stroke(toolColor);
-      strokeWeight(toolSize);
-      noFill();
-      rectMode(CENTER);
+      drawingLayer.beginDraw();
+      drawingLayer.image(beforeDrag, 0, 0);
+      drawingLayer.stroke(toolColor);
+      drawingLayer.strokeWeight(toolSize);
+      drawingLayer.noFill();
+      drawingLayer.rectMode(CENTER);
       float w = abs(mouseX - startX) * 2;
       float h = abs(mouseY - startY) * 2;
-      rect(startX, startY, w, h); // draw final rectangle
-
-
-      redoStack.clear();  
-
+      drawingLayer.rect(startX, startY, w, h);
+      drawingLayer.endDraw();
+      
       dragging = false;
       beforeDrag = null;
     }

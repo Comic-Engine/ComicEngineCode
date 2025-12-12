@@ -8,9 +8,11 @@ class PencilTool extends Tool {
   }
   
   void mouseDragged() {
-    stroke(toolColor);
-    strokeWeight(toolSize);
-    line(pmouseX, pmouseY, mouseX, mouseY);
+    drawingLayer.beginDraw();
+    drawingLayer.stroke(toolColor);
+    drawingLayer.strokeWeight(toolSize);
+    drawingLayer.line(pmouseX, pmouseY, mouseX, mouseY);
+    drawingLayer.endDraw();
   }
 }
 
@@ -24,9 +26,11 @@ class EraserTool extends Tool {
   }
 
   void mouseDragged() {
-    stroke(255);
-    strokeWeight(toolSize);
-    line(pmouseX, pmouseY, mouseX, mouseY);
+    drawingLayer.beginDraw();
+    drawingLayer.stroke(255);
+    drawingLayer.strokeWeight(toolSize);
+    drawingLayer.line(pmouseX, pmouseY, mouseX, mouseY);
+    drawingLayer.endDraw();
   }
 }
 
@@ -43,7 +47,7 @@ class LineTool extends Tool {
     startAction();
     startX = mouseX;
     startY = mouseY;
-    beforeDrag = get();
+    beforeDrag = drawingLayer.get();
     dragging = true;
   }
 
@@ -58,12 +62,12 @@ class LineTool extends Tool {
 
   void mouseReleased() {
     if(dragging){
-      image(beforeDrag, 0, 0);
-      stroke(toolColor);
-      strokeWeight(toolSize);
-      line(startX, startY, mouseX, mouseY);
-
-      redoStack.clear();
+      drawingLayer.beginDraw();
+      drawingLayer.image(beforeDrag, 0, 0);
+      drawingLayer.stroke(toolColor);
+      drawingLayer.strokeWeight(toolSize);
+      drawingLayer.line(startX, startY, mouseX, mouseY);
+      drawingLayer.endDraw();
       
       dragging = false;
       beforeDrag = null;

@@ -49,9 +49,12 @@ public void RedoButtonClick(GImageButton source, GEvent event) { //_CODE_:RedoBu
   println("Redo clicked! Stack size: " + redoStack.size());
   if(redoStack.size() > 0) {
     PImage next = redoStack.remove(redoStack.size() - 1);
-    undoStack.add(get());
-    set(0, 0, next);  // Use set() instead of image()
-    println("Redo complete! New stack size: " + redoStack.size());
+    undoStack.add(drawingLayer.get()); // Save current state
+    
+    // Restore to drawing layer (not main display)
+    drawingLayer.beginDraw();
+    drawingLayer.image(next, 0, 0);
+    drawingLayer.endDraw();
   }
 } //_CODE_:RedoButton:914227:
 
@@ -59,9 +62,12 @@ public void UndoButtonClick(GImageButton source, GEvent event) { //_CODE_:UndoBu
   println("Undo clicked! Stack size: " + undoStack.size());
   if(undoStack.size() > 0) {
     PImage last = undoStack.remove(undoStack.size() - 1);
-    redoStack.add(get());
-    set(0, 0, last);  // Use set() instead of image()
-    println("Undo complete! New stack size: " + undoStack.size());
+    redoStack.add(drawingLayer.get()); // Save current state
+    
+    // Restore to drawing layer (not main display)
+    drawingLayer.beginDraw();
+    drawingLayer.image(last, 0, 0);
+    drawingLayer.endDraw();
   }
 } //_CODE_:UndoButton:312280:
 
@@ -168,7 +174,7 @@ public void ColorBrightnessSliderChanged(GCustomSlider source, GEvent event) { /
 } //_CODE_:ColorBrightnessSlider:484316:
 
 public void GridCheckboxClicked(GCheckbox source, GEvent event) { //_CODE_:GridCheckbox:956630:
-  showGrid = !showGrid; // Toggle on/off
+  showGrid = source.isSelected();
   println("Grid: " + (showGrid ? "ON" : "OFF"));
 } //_CODE_:GridCheckbox:956630:
 

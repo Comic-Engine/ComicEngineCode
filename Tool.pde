@@ -12,9 +12,11 @@ class Tool {
   }
   
   void mouseDragged() {
-    stroke(toolColor);
-    strokeWeight(toolSize);
-    line(pmouseX, pmouseY, mouseX, mouseY);
+    drawingLayer.beginDraw();
+    drawingLayer.stroke(toolColor);
+    drawingLayer.strokeWeight(toolSize);
+    drawingLayer.line(pmouseX, pmouseY, mouseX, mouseY);
+    drawingLayer.endDraw();
   }
   
   void mouseReleased() {}

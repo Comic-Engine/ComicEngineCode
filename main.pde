@@ -9,6 +9,7 @@ float brightnessValue = 1.0;
 
 boolean showGrid = true;
 int gridSize = 50; // Pixels between grid lines
+PGraphics drawingLayer; // Seperate lauer for drawing (no grid)
 
 ArrayList<PImage> undoStack = new ArrayList<PImage>();
 ArrayList<PImage> redoStack = new ArrayList<PImage>();
@@ -17,39 +18,44 @@ PImage snapshot;
 void setup() {
   size(1000, 700);
   createGUI();
-  background(255);
+  
+  // Create a separate graphics buffer for the drawing
+  drawingLayer = createGraphics(width, height);
+  drawingLayer.beginDraw();
+  drawingLayer.background(255);
+  drawingLayer.endDraw();
   
   currentTool = new PencilTool(brushSize, currentColor); // Pencil as default
 }
 
 void startAction() {
-  snapshot = get();
+  snapshot = drawingLayer.get();
   undoStack.add(snapshot);
   redoStack.clear();
 }
 
 void draw(){
+  // Clear and redraw everything each frame
+  background(255);
+  
+  // Draw the drawing layer
+  image(drawingLayer, 0, 0);
+  
+  // Overlay the grid if enabled
   if(showGrid){
-    drawGrid();
+    pushStyle();
+    stroke(200, 200, 200, 100);
+    strokeWeight(1);
+    
+    for(int x = 0; x < width; x += gridSize) {
+      line(x, 0, x, height);
+    }
+    
+    for(int y = 0; y < height; y += gridSize) {
+      line(0, y, width, y);
+    }
+    popStyle();
   }
-}
-
-void drawGrid() {
-  push(); // Save drawing settings
-  stroke(200, 200, 200, 150); // Light gray, semi-transparent
-  strokeWeight(1);
-  
-  // Vertical lines
-  for(int x = 0; x < width; x += gridSize) {
-    line(x, 0, x, height);
-  }
-  
-  // Horizontal lines
-  for(int y = 0; y < height; y += gridSize) {
-    line(0, y, width, y);
-  }
-  
-  pop(); // Restore drawing settings
 }
 
 void mouseDragged() {
