@@ -1,17 +1,18 @@
 // Portrait Layout - 3 horizontal panels stacked vertically
+// Classic comic strip style
 void createPortraitLayout() {
   startAction(); // Save undo state
   
   drawingLayer.beginDraw();
   drawingLayer.stroke(0); // Black panels
   drawingLayer.strokeWeight(3); // Medium line weight
-  drawingLayer.noFill();
-  drawingLayer.rectMode(CORNER);
+  drawingLayer.noFill(); // No fill just outlines
+  drawingLayer.rectMode(CORNER); // Draw from corner
   
   int margin = 50; // Space around edges
   int gutter = 30; // Space between panels
   int panelWidth = width - (margin * 2);
-  int panelHeight = (height - (margin * 2) - (gutter * 2)) / 3; // Divide into 3
+  int panelHeight = (height - (margin * 2) - (gutter * 2)) / 3; // Divide height into 3
   
   // Top panel
   drawingLayer.rect(margin, margin, panelWidth, panelHeight);
@@ -24,7 +25,7 @@ void createPortraitLayout() {
   
   drawingLayer.endDraw();
   
-  println("Portrait layout created (3 panels)");
+  println("Portrait layout created (3 panels)"); // Print statement for user clarity 
 }
 
 // Landscape Layout - 3 vertical panels side by side
@@ -33,13 +34,13 @@ void createLandscapeLayout() {
   
   drawingLayer.beginDraw();
   drawingLayer.stroke(0); // Black panels
-  drawingLayer.strokeWeight(3);
-  drawingLayer.noFill();
-  drawingLayer.rectMode(CORNER);
+  drawingLayer.strokeWeight(3); // Medium line weight
+  drawingLayer.noFill(); // No fill just outlines
+  drawingLayer.rectMode(CORNER); // Draw from corner
   
-  int margin = 50;
-  int gutter = 30;
-  int panelWidth = (width - (margin * 2) - (gutter * 2)) / 3; // Divide into 3
+  int margin = 50; // Space around edges
+  int gutter = 30; // Space between panels
+  int panelWidth = (width - (margin * 2) - (gutter * 2)) / 3; // Divide height into 3
   int panelHeight = height - (margin * 2);
   
   // Left panel
@@ -53,21 +54,21 @@ void createLandscapeLayout() {
   
   drawingLayer.endDraw();
   
-  println("Landscape layout created (3 panels)");
+  println("Landscape layout created (3 panels)"); // Print statement for user clarity
 }
 
-// Bonus: Classic 4-panel grid (2x2)
+// Classic 4-panel grid (2x2)
 void createGridLayout() {
   startAction(); // Save undo state
   
   drawingLayer.beginDraw();
-  drawingLayer.stroke(0);
-  drawingLayer.strokeWeight(3);
-  drawingLayer.noFill();
-  drawingLayer.rectMode(CORNER);
+  drawingLayer.stroke(0); // Black panels
+  drawingLayer.strokeWeight(3); // Medium line weight
+  drawingLayer.noFill(); // No fill just outlines
+  drawingLayer.rectMode(CORNER); // Draw from corner
   
-  int margin = 50;
-  int gutter = 30;
+  int margin = 50; // Space around edges
+  int gutter = 30; // Space between panels
   int panelWidth = (width - (margin * 2) - gutter) / 2; // 2 columns
   int panelHeight = (height - (margin * 2) - gutter) / 2; // 2 rows
   
@@ -85,5 +86,5 @@ void createGridLayout() {
   
   drawingLayer.endDraw();
   
-  println("Grid layout created (4 panels, 2x2)");
+  println("Grid layout created (4 panels, 2x2)"); // Print statement for user clarity
 }

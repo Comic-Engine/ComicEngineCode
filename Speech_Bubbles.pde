@@ -9,7 +9,7 @@ class SpeechBubbleTool extends Tool {
   }
   
   void mousePressed() {
-    startAction();
+    startAction(); // Save undo snapshot
     startX = mouseX;
     startY = mouseY;
     beforeDrag = drawingLayer.get();
@@ -22,7 +22,7 @@ class SpeechBubbleTool extends Tool {
       drawingLayer.image(beforeDrag, 0, 0);
       drawingLayer.stroke(toolColor);
       drawingLayer.strokeWeight(toolSize);
-      drawingLayer.fill(255); // White fill
+      drawingLayer.fill(255); // White fill for text area
       
       float w = abs(mouseX - startX) * 2;
       float h = abs(mouseY - startY) * 2;
@@ -75,6 +75,7 @@ class SpeechBubbleTool extends Tool {
 }
 
 // Yelling Bubble - jagged spiky edges for shouting
+// Convey loud or aggressive speech
 class YellBubbleTool extends Tool {
   float startX, startY;
   PImage beforeDrag;
@@ -130,7 +131,13 @@ class YellBubbleTool extends Tool {
     }
   }
   
+  // Helper function to draw a spiky bubble shape (similar to star)
   void drawSpikeyBubble(PGraphics pg, float cx, float cy, float w, float h, int spikes) {
+    // PGraphics to draw on
+    // cx - center X
+    // cy - center Y
+    // w - horizantal radius
+    // h - vertical radius
     pg.beginShape();
     for (int i = 0; i < spikes; i++) {
       float angle = TWO_PI / spikes * i;
@@ -140,7 +147,7 @@ class YellBubbleTool extends Tool {
       float y1 = cy + sin(angle) * h;
       pg.vertex(x1, y1);
       
-      // Inner point (between spikes)
+      // Inner point (between spikes) jaggy effect
       float angle2 = angle + TWO_PI / spikes / 2;
       float x2 = cx + cos(angle2) * w * 0.7;
       float y2 = cy + sin(angle2) * h * 0.7;
@@ -150,7 +157,8 @@ class YellBubbleTool extends Tool {
   }
 }
 
-// Announcement/Broadcast Bubble - rectangular with decorative corners
+// Announcement/Broadcast Bubble
+// Formal rectangular shape with decorative corners for narration
 class AnnounceBubbleTool extends Tool {
   float startX, startY;
   PImage beforeDrag;
@@ -179,35 +187,35 @@ class AnnounceBubbleTool extends Tool {
       float w = abs(mouseX - startX) * 2;
       float h = abs(mouseY - startY) * 2;
       
-      // Main rectangle
+      // Main rectangle with rounded corners
       drawingLayer.rectMode(CENTER);
       drawingLayer.rect(startX, startY, w, h, 10);
       
       // Decorative corner triangles
       float cornerSize = min(w, h) * 0.15;
       
-      // Top-left
+      // Top left corner
       drawingLayer.triangle(
         startX - w/2, startY - h/2,
         startX - w/2 + cornerSize, startY - h/2,
         startX - w/2, startY - h/2 + cornerSize
       );
       
-      // Top-right
+      // Top right corner
       drawingLayer.triangle(
         startX + w/2, startY - h/2,
         startX + w/2 - cornerSize, startY - h/2,
         startX + w/2, startY - h/2 + cornerSize
       );
       
-      // Bottom-left
+      // Bottom left corner
       drawingLayer.triangle(
         startX - w/2, startY + h/2,
         startX - w/2 + cornerSize, startY + h/2,
         startX - w/2, startY + h/2 - cornerSize
       );
       
-      // Bottom-right
+      // Bottom right corner
       drawingLayer.triangle(
         startX + w/2, startY + h/2,
         startX + w/2 - cornerSize, startY + h/2,
@@ -266,7 +274,8 @@ class AnnounceBubbleTool extends Tool {
   }
 }
 
-// Thought/Dream Bubble - cloud-like with small bubbles leading to it
+// Thought/Dream Bubble
+// cloud-like with small bubbles leading to it and overlapping circles to create cloud effect
 class ThoughtBubbleTool extends Tool {
   float startX, startY;
   PImage beforeDrag;
@@ -298,10 +307,10 @@ class ThoughtBubbleTool extends Tool {
       // Draw cloud-like thought bubble (multiple overlapping circles)
       drawingLayer.ellipseMode(CENTER);
       
-      // Main large circle
+      // Main large circle in center
       drawingLayer.ellipse(startX, startY, w * 0.8, h * 0.8);
       
-      // Smaller circles around the edge for cloud effect
+      // Smaller circles around the edge for cloud effect and texture
       float r = w * 0.2;
       drawingLayer.ellipse(startX - w * 0.3, startY - h * 0.15, r, r);
       drawingLayer.ellipse(startX + w * 0.3, startY - h * 0.15, r, r);
@@ -309,7 +318,7 @@ class ThoughtBubbleTool extends Tool {
       drawingLayer.ellipse(startX + w * 0.25, startY + h * 0.2, r, r);
       drawingLayer.ellipse(startX, startY - h * 0.3, r * 0.9, r * 0.9);
       
-      // Small thought bubbles leading away
+      // Small thought bubbles leading away (toward speaker)
       float bubbleX = startX - w * 0.3;
       float bubbleY = startY + h * 0.4;
       drawingLayer.ellipse(bubbleX, bubbleY, w * 0.12, h * 0.12);

@@ -1,6 +1,6 @@
 class Tool {
-  float toolSize;
-  color toolColor;
+  float toolSize; // Size/thickness of the Tool
+  color toolColor; // Color of the tool
   
   Tool(float size, color c) {
     this.toolSize = size;
@@ -8,10 +8,12 @@ class Tool {
   }
   
   void mousePressed() {
-    startAction();
+    startAction(); // save undo snapshot
   }
   
   void mouseDragged() {
+    // Called continously while mouse is dragged
+    // Default draws a line from previous to current position
     drawingLayer.beginDraw();
     drawingLayer.stroke(toolColor);
     drawingLayer.strokeWeight(toolSize);
@@ -19,5 +21,5 @@ class Tool {
     drawingLayer.endDraw();
   }
   
-  void mouseReleased() {}
+  void mouseReleased() {} // Default does nothing, to be overridden by specific tools
 }

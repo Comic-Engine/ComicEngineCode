@@ -19,37 +19,37 @@ synchronized public void win_draw1(PApplet appc, GWinData data) { //_CODE_:Setti
 } //_CODE_:Settings:808014:
 
 public void PencilButtonClick(GButton source, GEvent event) { //_CODE_:PencilButton:261240:
-  currentTool = new PencilTool(brushSize, currentColor);
+  currentTool = new PencilTool(brushSize, currentColor); // Set tool to pencil tool
 } //_CODE_:PencilButton:261240:
 
 public void EraserButtonClick(GButton source, GEvent event) { //_CODE_:EraserButton:809047:
-  currentTool = new EraserTool(brushSize, color(255));
+  currentTool = new EraserTool(brushSize, color(255)); // Set tool to eraser tool (fixed white color)
 } //_CODE_:EraserButton:809047:
 
 public void ToolSliderChanged(GCustomSlider source, GEvent event) { //_CODE_:ToolSlider:942316:
   brushSize = ToolSlider.getValueF();
   if(currentTool != null){
-    currentTool.toolSize = brushSize;
+    currentTool.toolSize = brushSize; // Set brush size by updating tool class
   }
 } //_CODE_:ToolSlider:942316:
 
 public void LineButtonClick(GButton source, GEvent event) { //_CODE_:LineButton:506486:
-  currentTool = new LineTool(brushSize, currentColor);
+  currentTool = new LineTool(brushSize, currentColor); // Set tool to line tool
 } //_CODE_:LineButton:506486:
 
 public void RectangleButtonClick(GButton source, GEvent event) { //_CODE_:RectangleButton:428010:
-  currentTool = new RectangleTool(brushSize, currentColor);
+  currentTool = new RectangleTool(brushSize, currentColor); // Set tool to rectangle tool
 } //_CODE_:RectangleButton:428010:
 
 public void TriangleButtonClick(GButton source, GEvent event) { //_CODE_:TriangleButton:994882:
-  currentTool = new TriangleTool(brushSize, currentColor);
+  currentTool = new TriangleTool(brushSize, currentColor); // Set tool to triangle tool
 } //_CODE_:TriangleButton:994882:
 
 public void RedoButtonClick(GImageButton source, GEvent event) { //_CODE_:RedoButton:914227:
   println("Redo clicked! Stack size: " + redoStack.size());
   if(redoStack.size() > 0) {
-    PImage next = redoStack.remove(redoStack.size() - 1);
-    undoStack.add(drawingLayer.get()); // Save current state
+    PImage next = redoStack.remove(redoStack.size() - 1); // Pop redo image
+    undoStack.add(drawingLayer.get()); // Save current state so undo still works
     
     // Restore to drawing layer (not main display)
     drawingLayer.beginDraw();
@@ -61,8 +61,8 @@ public void RedoButtonClick(GImageButton source, GEvent event) { //_CODE_:RedoBu
 public void UndoButtonClick(GImageButton source, GEvent event) { //_CODE_:UndoButton:312280:
   println("Undo clicked! Stack size: " + undoStack.size());
   if(undoStack.size() > 0) {
-    PImage last = undoStack.remove(undoStack.size() - 1);
-    redoStack.add(drawingLayer.get()); // Save current state
+    PImage last = undoStack.remove(undoStack.size() - 1); // Pop undo image
+    redoStack.add(drawingLayer.get()); // Save current state to redo stack
     
     // Restore to drawing layer (not main display)
     drawingLayer.beginDraw();
@@ -73,14 +73,15 @@ public void UndoButtonClick(GImageButton source, GEvent event) { //_CODE_:UndoBu
 
 public void ColorWheel2DSliderChanged(GSlider2D source, GEvent event) { //_CODE_:ColorWheel2DSlider:867200:
   // Get x,y values from slider (0.0 to 1.0)
-  float x = ColorWheel2DSlider.getValueXF();
-  float y = ColorWheel2DSlider.getValueYF();
+  // Advanced color math
+  float x = ColorWheel2DSlider.getValueXF(); // X slider value
+  float y = ColorWheel2DSlider.getValueYF(); // Y slider value
   
   // Convert to centered coordinates (-0.5 to 0.5)
   float centerX = x - 0.5;
   float centerY = -(y - 0.5);
   
-  // Create PVector and get heading
+  // Create PVector and get angle using heading()
   PVector V = new PVector(centerX, centerY);
   float angle = V.heading();
   if (angle < 0) angle += TWO_PI; // No negative angles
@@ -88,7 +89,7 @@ public void ColorWheel2DSliderChanged(GSlider2D source, GEvent event) { //_CODE_
   // Width parameter for Gaussian (controls color spread)
   float w = 1.5;
   
-  // Calculate RGB using Gaussian formulas
+  // Calculate RGB using Gaussian formulas (desmos graph in github)
   float r = 255 * exp(-pow(angle - PI/2, 2) / w);
   float g = 255 * exp(-pow(angle - 7*PI/6, 2) / w);
   float b = 255 * exp(-pow(angle - 11*PI/6, 2) / w);
@@ -128,15 +129,13 @@ public void ColorWheel2DSliderChanged(GSlider2D source, GEvent event) { //_CODE_
     finalB = b * (1 - t);
   }
   
-  currentColor = color(finalR, finalG, finalB);
+  currentColor = color(finalR, finalG, finalB); // Final currentColor
   
   // Update current tool's color
   if(currentTool != null) {
     currentTool.toolColor = currentColor;
   }
-  
-  println("Angle: " + degrees(angle) + "°, Base RGB: " + r + ", " + g + ", " + b);
-
+  // println("Angle: " + degrees(angle) + "°, Base RGB: " + r + ", " + g + ", " + b);
 } //_CODE_:ColorWheel2DSlider:867200:
 
 public void ColorBrightnessSliderChanged(GCustomSlider source, GEvent event) { //_CODE_:ColorBrightnessSlider:484316:
@@ -169,68 +168,63 @@ public void ColorBrightnessSliderChanged(GCustomSlider source, GEvent event) { /
   if(currentTool != null) {
     currentTool.toolColor = currentColor;
   }
-  
-  println("Brightness: " + brightnessValue + ", Final RGB: " + finalR + ", " + finalG + ", " + finalB);
+  //println("Brightness: " + brightnessValue + ", Final RGB: " + finalR + ", " + finalG + ", " + finalB);
 } //_CODE_:ColorBrightnessSlider:484316:
 
 public void GridCheckboxClicked(GCheckbox source, GEvent event) { //_CODE_:GridCheckbox:956630:
-  showGrid = source.isSelected();
-  println("Grid: " + (showGrid ? "ON" : "OFF"));
+  showGrid = source.isSelected(); // Toggle grid
 } //_CODE_:GridCheckbox:956630:
 
 public void GridThicknessSliderChanged(GCustomSlider source, GEvent event) { //_CODE_:GridThicknessSlider:449857:
-  gridSize = source.getValueF();
+  gridSize = source.getValueF(); // set Grid Size to slider value
 } //_CODE_:GridThicknessSlider:449857:
 
 public void ZoomInButtonClick(GImageButton source, GEvent event) { //_CODE_:ZoomInButton:310758:
   zoomIn(1.5);
-  println("Zoom Level: " + zoomLevel);
 } //_CODE_:ZoomInButton:310758:
 
 public void ZoomOutButtonClick(GImageButton source, GEvent event) { //_CODE_:ZoomOutButton:264610:
   zoomOut(1.5);
-  println("Zoom Level: " + zoomLevel);
 } //_CODE_:ZoomOutButton:264610:
 
 public void ZoomResetClick(GButton source, GEvent event) { //_CODE_:ZoomReset:711430:
   resetZoom();
-  println("Zoom Reset to 1.0");
 } //_CODE_:ZoomReset:711430:
 
 public void EllipseButtonClick(GButton source, GEvent event) { //_CODE_:EllipseButton:419522:
-  currentTool = new EllipseTool(brushSize, currentColor);
+  currentTool = new EllipseTool(brushSize, currentColor); // Set tool to ellipse tool
 } //_CODE_:EllipseButton:419522:
 
 public void StarButtonClick(GButton source, GEvent event) { //_CODE_:StarButton:523301:
-  currentTool = new StarTool(brushSize, currentColor);
+  currentTool = new StarTool(brushSize, currentColor); // Set tool to star tool
 } //_CODE_:StarButton:523301:
 
 public void SprayPaintButtonClick(GButton source, GEvent event) { //_CODE_:SprayPaintButton:955701:
-  currentTool = new SprayPaintTool(brushSize, currentColor);
+  currentTool = new SprayPaintTool(brushSize, currentColor); // Set tool to spray paint tool
 } //_CODE_:SprayPaintButton:955701:
 
 public void SpeechBubbleButtonClick(GButton source, GEvent event) { //_CODE_:SpeechBubbleButton:288353:
-  currentTool = new SpeechBubbleTool(brushSize, currentColor);
+  currentTool = new SpeechBubbleTool(brushSize, currentColor); // Set tool to speech bubble tool
 } //_CODE_:SpeechBubbleButton:288353:
 
 public void YellBubbleButtonClick(GButton source, GEvent event) { //_CODE_:YellBubbleButton:906303:
-  currentTool = new YellBubbleTool(brushSize, currentColor);
+  currentTool = new YellBubbleTool(brushSize, currentColor); // Set tool to yell bubble tool
 } //_CODE_:YellBubbleButton:906303:
 
 public void AnnounceBubbleButtonClick(GButton source, GEvent event) { //_CODE_:AnounceBubbleButton:900458:
-  currentTool = new AnnounceBubbleTool(brushSize, currentColor);
+  currentTool = new AnnounceBubbleTool(brushSize, currentColor); // Set tool to announce bubble tool
 } //_CODE_:AnounceBubbleButton:900458:
 
 public void ThoughtBubbleButtonClick(GButton source, GEvent event) { //_CODE_:ThoughtBubbleButton:691306:
-  currentTool = new ThoughtBubbleTool(brushSize, currentColor);
+  currentTool = new ThoughtBubbleTool(brushSize, currentColor); // Set tool to thought bubble tool
 } //_CODE_:ThoughtBubbleButton:691306:
 
 public void SaveButtonClicked(GButton source, GEvent event) { //_CODE_:SaveButton:485838:
-  saveCanvas();
+  saveCanvas(); // Save function
 } //_CODE_:SaveButton:485838:
 
 public void ImportButtonClick(GButton source, GEvent event) { //_CODE_:ImportButton:456505:
-  importImage();
+  importImage(); // Import Image function
 } //_CODE_:ImportButton:456505:
 
 public void TextAreaChange(GTextArea source, GEvent event) { //_CODE_:TextArea:610195:
@@ -238,7 +232,7 @@ public void TextAreaChange(GTextArea source, GEvent event) { //_CODE_:TextArea:6
 } //_CODE_:TextArea:610195:
 
 public void PlaceTextButtonClick(GButton source, GEvent event) { //_CODE_:PlaceTextButton:295333:
-  if(currentTool instanceof TextTool) {
+  if(currentTool.getClass() == TextTool.class) {
     String text = TextArea.getText(); // Get text from your TextArea
     ((TextTool)currentTool).placeText(text);
     TextArea.setText(""); // Clear text area after placing
@@ -246,21 +240,21 @@ public void PlaceTextButtonClick(GButton source, GEvent event) { //_CODE_:PlaceT
 } //_CODE_:PlaceTextButton:295333:
 
 public void TextToolButtonClick(GButton source, GEvent event) { //_CODE_:TextToolButton:875166:
-  currentTool = new TextTool(24, currentColor);
+  currentTool = new TextTool(24, currentColor); // Set tool to text tool
   println("Text tool activated. Click on canvas to set text position.");
 } //_CODE_:TextToolButton:875166:
 
 public void PortraitLayoutButtonClick(GButton source, GEvent event) { //_CODE_:PotraitLayoutButton:426362:
-  createPortraitLayout(); 
+  createPortraitLayout();
 } //_CODE_:PotraitLayoutButton:426362:
-
-public void LandscapeLayoutButtonClick(GButton source, GEvent event) { //_CODE_:LandscapeLayoutButton:284219:
-  createLandscapeLayout();
-} //_CODE_:LandscapeLayoutButton:284219:
 
 public void GridLayoutButtonClick(GButton source, GEvent event) { //_CODE_:GridLayoutButton:624262:
   createGridLayout();
 } //_CODE_:GridLayoutButton:624262:
+
+public void LandscapeLayoutButtonClick(GButton source, GEvent event) { //_CODE_:LandscapeLayoutButton:834598:
+  createLandscapeLayout();
+} //_CODE_:LandscapeLayoutButton:834598:
 
 
 
@@ -422,14 +416,14 @@ public void createGUI(){
   PotraitLayoutButton.setText("Potrait");
   PotraitLayoutButton.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
   PotraitLayoutButton.addEventHandler(this, "PortraitLayoutButtonClick");
-  LandscapeLayoutButton = new GButton(Settings, 185, 480, 80, 30);
-  LandscapeLayoutButton.setText("Landscape");
-  LandscapeLayoutButton.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
-  LandscapeLayoutButton.addEventHandler(this, "LandscapeLayoutButtonClick");
-  GridLayoutButton = new GButton(Settings, 320, 480, 80, 30);
+  GridLayoutButton = new GButton(Settings, 300, 480, 80, 30);
   GridLayoutButton.setText("2 x 2");
   GridLayoutButton.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
   GridLayoutButton.addEventHandler(this, "GridLayoutButtonClick");
+  LandscapeLayoutButton = new GButton(Settings, 180, 480, 80, 30);
+  LandscapeLayoutButton.setText("Landscape");
+  LandscapeLayoutButton.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
+  LandscapeLayoutButton.addEventHandler(this, "LandscapeLayoutButtonClick");
   Settings.loop();
 }
 
@@ -471,5 +465,5 @@ GTextArea TextArea;
 GButton PlaceTextButton; 
 GButton TextToolButton; 
 GButton PotraitLayoutButton; 
-GButton LandscapeLayoutButton; 
 GButton GridLayoutButton; 
+GButton LandscapeLayoutButton; 
