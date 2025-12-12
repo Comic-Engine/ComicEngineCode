@@ -126,3 +126,59 @@ class SprayPaintTool extends Tool {
     // Spray effect ends when mouse is released
   }
 }
+
+class TextTool extends Tool {
+  float textX = 0;
+  float textY = 0;
+  boolean waitingForClick = true;
+  int textSizeValue = 24; // Default text size
+  
+  TextTool(float size, color c){
+    super(size, c);
+    textSizeValue = (int)size;
+  }
+  
+  void mousePressed() {
+    // Store where user clicked
+    textX = mouseX;
+    textY = mouseY;
+    waitingForClick = false;
+    
+    println("Text position set at (" + textX + ", " + textY + ")");
+    println("Enter text in the text area and click 'Place Text' button");
+  }
+  
+  void mouseDragged() {
+    // Text tool doesn't use drag
+  }
+  
+  void mouseReleased() {
+    // Text tool doesn't use release
+  }
+  
+  // Call this from your "Place Text" button
+  void placeText(String text) {
+    if (waitingForClick) {
+      println("Click on canvas first to set text position!");
+      return;
+    }
+    
+    if (text.length() == 0) {
+      println("Text area is empty! Type something first.");
+      return;
+    }
+    
+    // Place the text
+    startAction(); // Save undo state
+    
+    drawingLayer.beginDraw();
+    drawingLayer.fill(toolColor);
+    drawingLayer.textSize(textSizeValue);
+    drawingLayer.textAlign(LEFT, BASELINE);
+    drawingLayer.text(text, textX, textY);
+    drawingLayer.endDraw();
+    
+    println("Text placed: '" + text + "' at (" + textX + ", " + textY + ")");
+    waitingForClick = true; // Ready for next click
+  }
+}

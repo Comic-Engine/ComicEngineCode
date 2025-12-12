@@ -123,12 +123,56 @@ void resetZoom() {
   panY = 0;
 }
 
-// Mouse wheel zoom (optional - nice feature!)
+// Mouse wheel zoom (optional)
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
   if (e < 0) {
     zoomIn(1.1);
   } else {
     zoomOut(1.1);
+  }
+}
+
+void saveCanvas() {
+  // Create a file if not already created
+  File folder = new File(sketchPath("saves"));
+  if (!folder.exists()) {
+    folder.mkdir(); // Make directory
+    println("Created 'saves' folder");
+  }
+  
+  // Generate filename with timestamp
+  String timestamp = year() + "-" + nf(month(), 2) + "-" + nf(day(), 2) + "_" + 
+                     nf(hour(), 2) + "-" + nf(minute(), 2) + "-" + nf(second(), 2);
+  String filename = "saves/comic_" + timestamp + ".png";
+  
+  // Save the drawing layer (without grid)
+  drawingLayer.save(filename);
+  
+  println("Saved: " + filename);
+}
+
+void importImage() {
+  // Open file dialog for user to select an image
+  selectInput("Select an image to import:", "imageSelected");
+}
+
+void imageSelected(File selection) {
+  if (selection == null) {
+    println("No file selected");
+  } else {
+    PImage img = loadImage(selection.getAbsolutePath());
+    
+    if (img != null) {
+      startAction(); // Save undo state
+      
+      drawingLayer.beginDraw();
+      drawingLayer.image(img, 0, 0);
+      drawingLayer.endDraw();
+      
+      println("Image imported: " + selection.getName());
+    } else {
+      println("Error: Could not load image");
+    }
   }
 }

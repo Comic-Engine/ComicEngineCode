@@ -225,6 +225,43 @@ public void ThoughtBubbleButtonClick(GButton source, GEvent event) { //_CODE_:Th
   currentTool = new ThoughtBubbleTool(brushSize, currentColor);
 } //_CODE_:ThoughtBubbleButton:691306:
 
+public void SaveButtonClicked(GButton source, GEvent event) { //_CODE_:SaveButton:485838:
+  saveCanvas();
+} //_CODE_:SaveButton:485838:
+
+public void ImportButtonClick(GButton source, GEvent event) { //_CODE_:ImportButton:456505:
+  importImage();
+} //_CODE_:ImportButton:456505:
+
+public void TextAreaChange(GTextArea source, GEvent event) { //_CODE_:TextArea:610195:
+// Don't need to do anything here, user types away
+} //_CODE_:TextArea:610195:
+
+public void PlaceTextButtonClick(GButton source, GEvent event) { //_CODE_:PlaceTextButton:295333:
+  if(currentTool instanceof TextTool) {
+    String text = TextArea.getText(); // Get text from your TextArea
+    ((TextTool)currentTool).placeText(text);
+    TextArea.setText(""); // Clear text area after placing
+  }
+} //_CODE_:PlaceTextButton:295333:
+
+public void TextToolButtonClick(GButton source, GEvent event) { //_CODE_:TextToolButton:875166:
+  currentTool = new TextTool(24, currentColor);
+  println("Text tool activated. Click on canvas to set text position.");
+} //_CODE_:TextToolButton:875166:
+
+public void PortraitLayoutButtonClick(GButton source, GEvent event) { //_CODE_:PotraitLayoutButton:426362:
+  createPortraitLayout(); 
+} //_CODE_:PotraitLayoutButton:426362:
+
+public void LandscapeLayoutButtonClick(GButton source, GEvent event) { //_CODE_:LandscapeLayoutButton:284219:
+  createLandscapeLayout();
+} //_CODE_:LandscapeLayoutButton:284219:
+
+public void GridLayoutButtonClick(GButton source, GEvent event) { //_CODE_:GridLayoutButton:624262:
+  createGridLayout();
+} //_CODE_:GridLayoutButton:624262:
+
 
 
 // Create all the GUI controls. 
@@ -234,7 +271,7 @@ public void createGUI(){
   G4P.setGlobalColorScheme(GCScheme.BLUE_SCHEME);
   G4P.setMouseOverEnabled(false);
   surface.setTitle("Sketch Window");
-  Settings = GWindow.getWindow(this, "Settings", 0, 0, 480, 480, JAVA2D);
+  Settings = GWindow.getWindow(this, "Settings", 0, 0, 480, 520, JAVA2D);
   Settings.noLoop();
   Settings.setActionOnClose(G4P.KEEP_OPEN);
   Settings.addDrawHandler(this, "win_draw1");
@@ -300,7 +337,7 @@ public void createGUI(){
   ZoomOutButton.addEventHandler(this, "ZoomOutButtonClick");
   ZoomReset = new GButton(Settings, 335, 135, 80, 30);
   ZoomReset.setText("Zoom Reset");
-  ZoomReset.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
+  ZoomReset.setLocalColorScheme(GCScheme.RED_SCHEME);
   ZoomReset.addEventHandler(this, "ZoomResetClick");
   EllipseButton = new GButton(Settings, 20, 135, 80, 30);
   EllipseButton.setText("Ellipse");
@@ -360,6 +397,39 @@ public void createGUI(){
   BLabel.setText("_");
   BLabel.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   BLabel.setOpaque(true);
+  SaveButton = new GButton(Settings, 65, 15, 80, 30);
+  SaveButton.setText("Save");
+  SaveButton.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
+  SaveButton.addEventHandler(this, "SaveButtonClicked");
+  ImportButton = new GButton(Settings, 155, 15, 80, 30);
+  ImportButton.setText("Import");
+  ImportButton.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
+  ImportButton.addEventHandler(this, "ImportButtonClick");
+  TextArea = new GTextArea(Settings, 225, 345, 180, 80, G4P.SCROLLBARS_NONE);
+  TextArea.setPromptText("Enter Some Text to Bring your Comic to Life!");
+  TextArea.setLocalColorScheme(GCScheme.CYAN_SCHEME);
+  TextArea.setOpaque(true);
+  TextArea.addEventHandler(this, "TextAreaChange");
+  PlaceTextButton = new GButton(Settings, 325, 435, 80, 30);
+  PlaceTextButton.setText("Place Text");
+  PlaceTextButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
+  PlaceTextButton.addEventHandler(this, "PlaceTextButtonClick");
+  TextToolButton = new GButton(Settings, 225, 435, 80, 30);
+  TextToolButton.setText("Activate Text");
+  TextToolButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
+  TextToolButton.addEventHandler(this, "TextToolButtonClick");
+  PotraitLayoutButton = new GButton(Settings, 50, 480, 80, 30);
+  PotraitLayoutButton.setText("Potrait");
+  PotraitLayoutButton.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
+  PotraitLayoutButton.addEventHandler(this, "PortraitLayoutButtonClick");
+  LandscapeLayoutButton = new GButton(Settings, 185, 480, 80, 30);
+  LandscapeLayoutButton.setText("Landscape");
+  LandscapeLayoutButton.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
+  LandscapeLayoutButton.addEventHandler(this, "LandscapeLayoutButtonClick");
+  GridLayoutButton = new GButton(Settings, 320, 480, 80, 30);
+  GridLayoutButton.setText("2 x 2");
+  GridLayoutButton.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
+  GridLayoutButton.addEventHandler(this, "GridLayoutButtonClick");
   Settings.loop();
 }
 
@@ -395,3 +465,11 @@ GLabel ColorBrightnessLabel;
 GLabel GLabel; 
 GLabel RLabel; 
 GLabel BLabel; 
+GButton SaveButton; 
+GButton ImportButton; 
+GTextArea TextArea; 
+GButton PlaceTextButton; 
+GButton TextToolButton; 
+GButton PotraitLayoutButton; 
+GButton LandscapeLayoutButton; 
+GButton GridLayoutButton; 
