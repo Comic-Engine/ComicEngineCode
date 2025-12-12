@@ -53,10 +53,14 @@ class LineTool extends Tool {
 
   void mouseDragged() {
     if(dragging){
-      image(beforeDrag, 0, 0);
-      stroke(toolColor);
-      strokeWeight(toolSize);
-      line(startX, startY, mouseX, mouseY);
+      // Restore the canvas state, draw preview line
+      drawingLayer.beginDraw();
+      drawingLayer.background(255); // Clear first
+      drawingLayer.image(beforeDrag, 0, 0); // Restore saved state
+      drawingLayer.stroke(toolColor);
+      drawingLayer.strokeWeight(toolSize);
+      drawingLayer.line(startX, startY, mouseX, mouseY);
+      drawingLayer.endDraw();
     }
   }
 

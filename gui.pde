@@ -178,6 +178,10 @@ public void GridCheckboxClicked(GCheckbox source, GEvent event) { //_CODE_:GridC
   println("Grid: " + (showGrid ? "ON" : "OFF"));
 } //_CODE_:GridCheckbox:956630:
 
+public void GridThicknessSliderChanged(GCustomSlider source, GEvent event) { //_CODE_:GridThicknessSlider:449857:
+  gridSize = source.getValueF();
+} //_CODE_:GridThicknessSlider:449857:
+
 
 
 // Create all the GUI controls. 
@@ -197,7 +201,7 @@ public void createGUI(){
   EraserButton = new GButton(Settings, 110, 95, 80, 30);
   EraserButton.setText("Eraser");
   EraserButton.addEventHandler(this, "EraserButtonClick");
-  ToolSlider = new GCustomSlider(Settings, 55, 190, 100, 40, "grey_blue");
+  ToolSlider = new GCustomSlider(Settings, 205, 240, 100, 50, "grey_blue");
   ToolSlider.setShowValue(true);
   ToolSlider.setLimits(15.0, 0.1, 50.0);
   ToolSlider.setNbrTicks(5);
@@ -233,12 +237,20 @@ public void createGUI(){
   ColorBrightnessSlider.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
   ColorBrightnessSlider.setOpaque(false);
   ColorBrightnessSlider.addEventHandler(this, "ColorBrightnessSliderChanged");
-  GridCheckbox = new GCheckbox(Settings, 195, 200, 100, 20);
+  GridCheckbox = new GCheckbox(Settings, 205, 330, 100, 20);
   GridCheckbox.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   GridCheckbox.setText("Grid Lines");
   GridCheckbox.setOpaque(false);
   GridCheckbox.addEventHandler(this, "GridCheckboxClicked");
   GridCheckbox.setSelected(true);
+  GridThicknessSlider = new GCustomSlider(Settings, 205, 360, 100, 50, "grey_blue");
+  GridThicknessSlider.setShowValue(true);
+  GridThicknessSlider.setLimits(40.0, 5.0, 75.0);
+  GridThicknessSlider.setNbrTicks(14);
+  GridThicknessSlider.setShowTicks(true);
+  GridThicknessSlider.setNumberFormat(G4P.DECIMAL, 0);
+  GridThicknessSlider.setOpaque(false);
+  GridThicknessSlider.addEventHandler(this, "GridThicknessSliderChanged");
   Settings.loop();
 }
 
@@ -256,3 +268,4 @@ GImageButton UndoButton;
 GSlider2D ColorWheel2DSlider; 
 GCustomSlider ColorBrightnessSlider; 
 GCheckbox GridCheckbox; 
+GCustomSlider GridThicknessSlider; 

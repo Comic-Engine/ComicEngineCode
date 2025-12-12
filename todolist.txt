@@ -1,6 +1,4 @@
 // to do
-// checkbox for enabling grid + grid
-// rgb slider or some sort of colour customization (inspo from color picker program)
 // vector fill feature
 // save system
 // load system
