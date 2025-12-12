@@ -42,7 +42,7 @@ public void RectangleButtonClick(GButton source, GEvent event) { //_CODE_:Rectan
 } //_CODE_:RectangleButton:428010:
 
 public void TriangleButtonClick(GButton source, GEvent event) { //_CODE_:TriangleButton:994882:
-  println("TriangleButton - GButton >> GEvent." + event + " @ " + millis());
+  currentTool = new TriangleTool(brushSize, currentColor);
 } //_CODE_:TriangleButton:994882:
 
 public void RedoButtonClick(GImageButton source, GEvent event) { //_CODE_:RedoButton:914227:
@@ -197,6 +197,14 @@ public void ZoomResetClick(GButton source, GEvent event) { //_CODE_:ZoomReset:71
   println("Zoom Reset to 1.0");
 } //_CODE_:ZoomReset:711430:
 
+public void EllipseButtonClick(GButton source, GEvent event) { //_CODE_:EllipseButton:419522:
+  currentTool = new EllipseTool(brushSize, currentColor);
+} //_CODE_:EllipseButton:419522:
+
+public void StarButtonClick(GButton source, GEvent event) { //_CODE_:StarButton:523301:
+  currentTool = new StarTool(brushSize, currentColor);
+} //_CODE_:StarButton:523301:
+
 
 
 // Create all the GUI controls. 
@@ -210,7 +218,7 @@ public void createGUI(){
   Settings.noLoop();
   Settings.setActionOnClose(G4P.KEEP_OPEN);
   Settings.addDrawHandler(this, "win_draw1");
-  PencilButton = new GButton(Settings, 110, 53, 80, 30);
+  PencilButton = new GButton(Settings, 110, 55, 80, 30);
   PencilButton.setText("Pencil");
   PencilButton.addEventHandler(this, "PencilButtonClick");
   EraserButton = new GButton(Settings, 110, 95, 80, 30);
@@ -224,14 +232,14 @@ public void createGUI(){
   ToolSlider.setNumberFormat(G4P.DECIMAL, 2);
   ToolSlider.setOpaque(false);
   ToolSlider.addEventHandler(this, "ToolSliderChanged");
-  LineButton = new GButton(Settings, 110, 135, 80, 30);
+  LineButton = new GButton(Settings, 109, 135, 80, 30);
   LineButton.setText("Line");
   LineButton.addEventHandler(this, "LineButtonClick");
   RectangleButton = new GButton(Settings, 20, 55, 80, 30);
   RectangleButton.setText("Rectangle");
   RectangleButton.setLocalColorScheme(GCScheme.GOLD_SCHEME);
   RectangleButton.addEventHandler(this, "RectangleButtonClick");
-  TriangleButton = new GButton(Settings, 20, 94, 80, 30);
+  TriangleButton = new GButton(Settings, 20, 95, 80, 30);
   TriangleButton.setText("Triangle");
   TriangleButton.setLocalColorScheme(GCScheme.GOLD_SCHEME);
   TriangleButton.addEventHandler(this, "TriangleButtonClick");
@@ -274,6 +282,14 @@ public void createGUI(){
   ZoomReset.setText("Zoom Reset");
   ZoomReset.setLocalColorScheme(GCScheme.RED_SCHEME);
   ZoomReset.addEventHandler(this, "ZoomResetClick");
+  EllipseButton = new GButton(Settings, 20, 135, 80, 30);
+  EllipseButton.setText("Ellipse");
+  EllipseButton.setLocalColorScheme(GCScheme.GOLD_SCHEME);
+  EllipseButton.addEventHandler(this, "EllipseButtonClick");
+  StarButton = new GButton(Settings, 20, 175, 80, 30);
+  StarButton.setText("Star");
+  StarButton.setLocalColorScheme(GCScheme.GOLD_SCHEME);
+  StarButton.addEventHandler(this, "StarButtonClick");
   Settings.loop();
 }
 
@@ -295,3 +311,5 @@ GCustomSlider GridThicknessSlider;
 GImageButton ZoomInButton; 
 GImageButton ZoomOutButton; 
 GButton ZoomReset; 
+GButton EllipseButton; 
+GButton StarButton; 

@@ -3,7 +3,6 @@
 // save system
 // load system
 // Import images
-// zoom in and out
 // text
-// more shapes like star, triangle, custom polygon, etc
+// more shapes like star, triangle etc
 // more tools (select tool for now)
